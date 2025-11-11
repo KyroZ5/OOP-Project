@@ -13,14 +13,6 @@ class Users {
 		this.password = password;
 		this.employeeName = employeeName;
 	}
-	public boolean equalsIgnoreCase(Users users) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean equalsIgnoreCase(String userL) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	public String getUsername() { 
 		return username; }
     public String getPassword() { 
