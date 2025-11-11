@@ -1,13 +1,14 @@
+	
 package posSystem;
 
 import java.io.*;
 import java.util.*;
 
-class Users {
-	ArrayList<Users> accts = new ArrayList<>();
-	private String username;
-	private String password; 
-	private String employeeName;
+public class Users {
+    public static ArrayList<Users> accts = new ArrayList<>();
+	String username;
+	String password; 
+        String employeeName;
 	Users(String username, String password, String employeeName){
 		this.username = username;
 		this.password = password;
@@ -15,10 +16,11 @@ class Users {
 	}
 	public String getUsername() { 
 		return username; }
-    public String getPassword() { 
+        public String getPassword() { 
     	return password; }
-    public String getEmployeeName() { 
+        public String getEmployeeName() { 
     	return employeeName; }
+   
     
 	public void loadUsersFromFile() throws FileNotFoundException, IOException {
 		
@@ -30,7 +32,8 @@ class Users {
                     Users user = new Users(parts[1], parts[2], parts[0]);
                     accts.add(user);
                 }
-            }
-		}
+            } 
+               }
+                System.out.println();
 	}	
 }

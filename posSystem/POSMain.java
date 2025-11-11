@@ -60,13 +60,13 @@ public class POSMain extends JFrame implements ActionListener {
 
    
     }
-    void loadUsers() {
+    static void loadUsers() {
     	try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 3) { 
-                	Users user = new Users(parts[1], parts[2], parts[0]);
+                    Users user = new Users(parts[1], parts[2], parts[0]);
                     Users.accts.add(user);
                 }
             }
@@ -87,8 +87,8 @@ public class POSMain extends JFrame implements ActionListener {
             String PassL = new String(txtPassword.getPassword()).trim(); // Proper handling for passwords
             boolean authenticated = false;
 
-            for (int i = 0; i < size; i++) {
-                if (username.get(i).equalsIgnoreCase(UserL) && password.get(i).equals(PassL)) {
+            for (int i = 0; i < Users.accts.size(); i++) {
+                if (UserL.equals(Users.accts.get(i).username) && PassL.equals(Users.accts.get(i).password)) {
                     authenticated = true;
                    
 
@@ -96,7 +96,7 @@ public class POSMain extends JFrame implements ActionListener {
                         //new SelectionAdmin().setVisible(true);
                         setVisible(false);
                         JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-                    } else if (UserL.equalsIgnoreCase(username.get(i))) { 
+                    } else if (UserL.equals(Users.accts.get(i).username)) { 
                         //new SelectionCashier().setVisible(true);
                         setVisible(false);
                         JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -112,8 +112,12 @@ public class POSMain extends JFrame implements ActionListener {
     }
     
  public static void main(String[] args) {
+         
 	 POSMain pos = new POSMain();
-     pos.setVisible(true);
+         loadUsers();
+         pos.setVisible(true);
+
+
  }
  
 
