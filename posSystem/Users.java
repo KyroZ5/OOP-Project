@@ -1,7 +1,6 @@
 	
 package posSystem;
 
-import java.io.*;
 import java.util.*;
 
 public class Users {
@@ -21,19 +20,15 @@ public class Users {
         public String getEmployeeName() { 
     	return employeeName; }
    
-    
-	public void loadUsersFromFile() throws FileNotFoundException, IOException {
-		
-		try(BufferedReader br = new BufferedReader(new FileReader("users.txt"))){
-            String line;
-            while ((line = br.readLine()) != null) {
+
+	public void Users() {
+            String line = null;
+            while ((line != null)) {
                 String[] parts = line.split(",");
                 if (parts.length == 3) {
                     Users user = new Users(parts[1], parts[2], parts[0]);
                     accts.add(user);
-                }
-            } 
-               }
-                System.out.println();
-	}	
+         }
+      } 
+   }
 }
