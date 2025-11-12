@@ -12,7 +12,8 @@ public class POSMain extends JFrame implements ActionListener {
 	
 	JPanel p1 = new JPanel();
     JPanel p2 = new JPanel();
-
+    JPanel p3 = new JPanel();
+    
     JLabel lblUsername = new JLabel(" ");
     JLabel lblPassword = new JLabel(" ");
     JTextField txtUsername = new JTextField(15);
@@ -47,9 +48,15 @@ public class POSMain extends JFrame implements ActionListener {
 	JLabel lLogo = new JLabel();
 	ImageIcon llogo = new ImageIcon("./img/lock.png");	
 
-    
+	ImageIcon PLogo = new ImageIcon("./img/pic.jpg");
+	Image imgP = PLogo.getImage();
+	Image newPLogo = imgP.getScaledInstance(400,400,java.awt.Image.SCALE_SMOOTH);
+	ImageIcon ppLogo = new ImageIcon(newPLogo);
+	JLabel pLogo = new JLabel();
+	ImageIcon plogo = new ImageIcon("./img/pic.jpg");	
+
     public POSMain() {
-    	 setSize(450, 400);
+    	 setSize(650, 400);
          setLocationRelativeTo(null);
          setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          setTitle("Login Form");
@@ -60,22 +67,32 @@ public class POSMain extends JFrame implements ActionListener {
          
          add(p2);
          add(p1);
-
+         add(p3);
+         
          p1.add(lblUsername);
          p1.add(lblPassword);
          p1.add(txtUsername);
          p1.add(txtPassword);
          p1.add(btnLogin);
          p1.add(btnCancel);
-         p1.setBounds(0, 130, 450, 275);
+         p1.setBounds(200, 130, 450, 275);
          p1.setLayout(null);
          p1.setBackground(myColor);
+         
          p1.add(uLogo);
          uLogo.setBounds(100, 0, 375, 105);
          uLogo.setIcon(uuLogo);
+         
          p1.add(lLogo);
          lLogo.setBounds(110, 50, 375, 105);
          lLogo.setIcon(llLogo);
+         
+         p3.setBounds(0, 0, 650, 400);
+         p3.setLayout(null);
+         p3.setBackground(myColor);
+         p3.add(pLogo);
+         pLogo.setBounds(0, 0, 700, 400);
+         pLogo.setIcon(ppLogo);
          
          lblUsername.setBounds(80, 35, 150, 30);
          lblUsername.setFont(font);
@@ -96,7 +113,7 @@ public class POSMain extends JFrame implements ActionListener {
          p2.add(lblWelcome);
          p2.add(lblSub);
          p2.add(lblLine);
-         p2.setBounds(0, 0, 450, 130);
+         p2.setBounds(200, 0, 450, 130);
          p2.setLayout(null);
          p2.setBackground(myColor);
          p2.add(bLogo);
