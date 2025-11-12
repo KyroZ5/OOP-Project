@@ -155,13 +155,6 @@ public class POSMain extends JFrame implements ActionListener {
          });
     }
    
-
-    private void setBorder(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	@Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnCancel) {
