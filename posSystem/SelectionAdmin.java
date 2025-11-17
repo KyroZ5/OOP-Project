@@ -10,16 +10,16 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 
 	ImageIcon MLogo = new ImageIcon("./img/logo-light-transparent.png");
     Image img = MLogo.getImage();
-    Image newLogo = img.getScaledInstance(125, 25, Image.SCALE_SMOOTH);
+    Image newLogo = img.getScaledInstance(130, 30, Image.SCALE_SMOOTH);
     ImageIcon Logo = new ImageIcon(newLogo);
     JLabel mLogo = new JLabel();
     ImageIcon mlogo = new ImageIcon("./img/logo-icon-dark-transparent.png");
 	
-	ImageIcon ALogo = new ImageIcon("./img/logo-icon-light-transparent.png");
+	ImageIcon ALogo = new ImageIcon("./img/Transaction.png");
 	Image imgA = ALogo.getImage();
 	Image newALogo = imgA.getScaledInstance(80,80,java.awt.Image.SCALE_SMOOTH);
 	ImageIcon aLogo = new ImageIcon(newALogo);
-	JButton btnLogout = new JButton(aLogo);
+	JButton btnTransaction = new JButton(aLogo);
 	
 	ImageIcon BLogo = new ImageIcon("./img/cashier1.png");
 	Image imgB = BLogo.getImage();
@@ -39,7 +39,7 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 	ImageIcon dLogo = new ImageIcon(newDLogo);
 	JButton btnInventory = new JButton(dLogo);
 	
-	JLabel lblLogout = new JLabel("Transactions");
+	JLabel lblTransaction = new JLabel("Transactions");
 	JLabel lblCashier = new JLabel("Cashier");
 	JLabel lblAdmin = new JLabel("Accounts");
 	JLabel lblInven = new JLabel("Inventory");
@@ -68,9 +68,9 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         newLogin.add(btnCashier);
         newLogin.add(btnAdmin);
         newLogin.add(btnInventory);
-        newLogin.add(btnLogout);
+        newLogin.add(btnTransaction);
         newLogin.add(btnOut);
-        newLogin.add(lblLogout);
+        newLogin.add(lblTransaction);
         newLogin.add(lblCashier);
         newLogin.add(lblAdmin);
         newLogin.add(lblInven);
@@ -81,31 +81,31 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 	    
 	    btnOut.setBounds(350,200,100,25);
 	    
-	    btnInventory.setBounds(40,40,80,80);
+	    btnInventory.setBounds(40,60,80,80);
 	    btnInventory.setBackground(myColor);
-	    btnCashier.setBounds(140,40,80,80);
+	    btnCashier.setBounds(140,60,80,80);
 	    btnCashier.setBackground(myColor);
-	    btnAdmin.setBounds(240,40,80,80);
+	    btnAdmin.setBounds(240,60,80,80);
 	    btnAdmin.setBackground(myColor);
-	    lblInven.setBounds(45,95,120,80);
+	    lblInven.setBounds(45,115,120,80);
 	    lblInven.setEnabled(true); 
         lblInven.setFont(font);
-	    lblCashier.setBounds(150,95,120,80);
+	    lblCashier.setBounds(150,115,120,80);
         lblCashier.setFont(font);
-	    lblAdmin.setBounds(245,95,120,80);
+	    lblAdmin.setBounds(245,115,120,80);
 	    lblAdmin.setEnabled(true); 
         lblAdmin.setFont(font);
-	    btnLogout.setBounds(350,40,80,80);
-	    btnLogout.setBackground(myColor);
-        lblLogout.setBounds(345,95,120,80);
-	    lblLogout.setEnabled(true); 
-        lblLogout.setFont(font);
-	    btnLogout.setEnabled(true); 
+	    btnTransaction.setBounds(340,60,80,80);
+	    btnTransaction.setBackground(myColor);
+        lblTransaction.setBounds(335,115,120,80);
+	    lblTransaction.setEnabled(true); 
+        lblTransaction.setFont(font);
+	    btnTransaction.setEnabled(true); 
 	    btnCashier.setEnabled(true); 
 	    btnAdmin.setEnabled(true);
 	    btnInventory.setEnabled(true);
 	    btnOut.setEnabled(true);
-	    btnLogout.addActionListener(this); 
+	    btnTransaction.addActionListener(this); 
 	    btnOut.addActionListener(this);
 	    btnCashier.addActionListener(this); 
 	    btnAdmin.addActionListener(this);
@@ -121,20 +121,18 @@ public class SelectionAdmin extends JFrame implements ActionListener{
     @Override
    	public void actionPerformed(ActionEvent ev) {
    		if(ev.getSource()==btnCashier) {
-   	        AdminCashier pos = new AdminCashier();
-            pos.setVisible(true);
+   	       
             setVisible(false);
    			
    		}else if(ev.getSource()==btnAdmin) {
-   	        Admin login = new Admin();
-   	        login.setVisible(true);
+   	
    	        setVisible(false);
    			
    		}else if(ev.getSource()==btnInventory) {
-   		InventoryAdmin login = new InventoryAdmin();
-   	        login.setVisible(true);
+   		
    	        setVisible(false);
-   		}else if(ev.getSource()==btnLogout) {
+   			
+   		}else if(ev.getSource()==btnTransaction) {
         	
         	  
         }else if(ev.getSource()==btnOut) {

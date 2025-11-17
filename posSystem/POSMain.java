@@ -13,7 +13,7 @@ public class POSMain extends JFrame implements ActionListener {
 	JPanel p1 = new JPanel();
     JPanel p2 = new JPanel();
     JPanel p3 = new JPanel();
-//    
+    
     JLabel lblUsername = new JLabel(" ");
     JLabel lblPassword = new JLabel(" ");
     JTextField txtUsername = new JTextField(15);
