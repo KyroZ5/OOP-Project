@@ -96,15 +96,18 @@ public class SelectionCashier extends JFrame implements ActionListener{
     @Override
    	public void actionPerformed(ActionEvent ev) {
    		if(ev.getSource()==btnCashier) {
-   	   
-            setVisible(false);
-   			
+                   Cashier pos = new Cashier();
+                   pos.setVisible(true);
+                   setVisible(false);
+   	 		
    		}else if(ev.getSource()==btnAdmin) {
-   			
+                Admin login = new Admin();
+   	        login.setVisible(true);
    	        setVisible(false);
    			
    		}else if(ev.getSource()==btnInventory) {
-
+                Inventory login = new Inventory();
+   	        login.setVisible(true);
    	        setVisible(false);
    			
    		}else if(ev.getSource()==btnLogout) {
