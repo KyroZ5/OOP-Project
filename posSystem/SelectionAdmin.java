@@ -120,18 +120,19 @@ public class SelectionAdmin extends JFrame implements ActionListener{
     }
     @Override
    	public void actionPerformed(ActionEvent ev) {
-   		if(ev.getSource()==btnCashier) {
-   	       
-            setVisible(false);
+ 		if(ev.getSource()==btnCashier) {
+   		AdminCashier pos = new AdminCashier();
+            	pos.setVisible(true);
+            	setVisible(false);
    			
    		}else if(ev.getSource()==btnAdmin) {
-   	
+		Admin login = new Admin();
+   	        login.setVisible(true);
    	        setVisible(false);
-   			
    		}else if(ev.getSource()==btnInventory) {
-   		
+   		InventoryAdmin login = new InventoryAdmin();
+   	        login.setVisible(true);
    	        setVisible(false);
-   			
    		}else if(ev.getSource()==btnTransaction) {
         	
         	  

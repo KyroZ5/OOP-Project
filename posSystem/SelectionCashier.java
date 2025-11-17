@@ -105,13 +105,19 @@ public class SelectionCashier extends JFrame implements ActionListener{
     @Override
    	public void actionPerformed(ActionEvent ev) {
    		if(ev.getSource()==btnCashier) {
-   	       
-            setVisible(false);
+   	         Cashier pos = new Cashier();
+                   pos.setVisible(true);
+                   setVisible(false);
    		}else if(ev.getSource()==btnInventory) {
-   		
+   		nventory login = new Inventory();
+   	        login.setVisible(true);
    	        setVisible(false);
+
    		}else if(ev.getSource()==btnTransaction) {
-        	
+        	Admin login = new Admin();
+   	        login.setVisible(true);
+   	        setVisible(false);
+   		
         	  
         }else if(ev.getSource()==btnOut) {
               int x = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Logging out", JOptionPane.YES_NO_OPTION);
