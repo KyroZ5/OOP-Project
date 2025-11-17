@@ -80,7 +80,7 @@ public class POSMain extends JFrame implements ActionListener {
          p1.setBackground(myColor);
          
          p1.add(uLogo);
-         uLogo.setBounds(100, 0, 375, 105);
+         uLogo.setBounds(100, -3, 375, 105);
          uLogo.setIcon(uuLogo);
          
          p1.add(lLogo);
@@ -199,9 +199,15 @@ public class POSMain extends JFrame implements ActionListener {
                 for (int i = 0; i < Users.accts.size(); i++) {
                     System.out.println(Users.accts.get(i).username + " " + Users.accts.get(i).password + " " + Users.accts.get(i).getEmployeeName());
                     if (UserL.equals(Users.accts.get(i).username) && PassL.equals(Users.accts.get(i).password)) {
-                        authenticated = true;
+                        authenticated = true;    
                         JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-                        break;
+   
+                        if (UserL.equalsIgnoreCase("admin") && PassL.equals("admin")) { 
+                            new SelectionAdmin().setVisible(true);
+                            setVisible(false);
+                            JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        }
                     }
                 }
                 if (!authenticated) {
