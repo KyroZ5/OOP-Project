@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+
 public class SelectionCashier extends JFrame implements ActionListener{
 	
 	JPanel newLogin = new JPanel();
@@ -105,10 +106,12 @@ public class SelectionCashier extends JFrame implements ActionListener{
     @Override
    	public void actionPerformed(ActionEvent ev) {
    		if(ev.getSource()==btnCashier) {
-   	       
+   			Cashier pos = new Cashier();
+            pos.setVisible(true);
             setVisible(false);
    		}else if(ev.getSource()==btnInventory) {
-   		
+   			Inventory login = new Inventory();
+   	        login.setVisible(true);
    	        setVisible(false);
    		}else if(ev.getSource()==btnTransaction) {
         	
