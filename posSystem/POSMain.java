@@ -3,6 +3,8 @@ package posSystem;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 public class POSMain extends JFrame implements ActionListener {
 	
@@ -130,6 +132,7 @@ public class POSMain extends JFrame implements ActionListener {
          lblSub.setBounds(180, 110, 200, 20);
          lblSub.setForeground(Color.WHITE); 
 
+        // Placeholder for Username
          txtUsername.setText("Username");
          txtUsername.setForeground(Color.GRAY);
          txtUsername.addFocusListener(new FocusAdapter() {
@@ -147,6 +150,7 @@ public class POSMain extends JFrame implements ActionListener {
              }
          });
 
+         // Placeholder for Password
          txtPassword.setText("Password");
          txtPassword.setForeground(Color.GRAY);
          txtPassword.setEchoChar((char) 0); // Show text instead of masking

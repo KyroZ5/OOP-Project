@@ -28,7 +28,11 @@ public class Users {
             }
         }
     }
-  
+
+    public String saveUser() {
+        return username + "," + pass + "," + empName;
+    }
+
     public static Users findUser(String username, String password) {
         for (Users u : accts) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {

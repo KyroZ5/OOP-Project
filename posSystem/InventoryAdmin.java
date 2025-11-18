@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 public class InventoryAdmin extends JFrame implements ActionListener {
 
-	ArrayList<Item> items = InventoryData.getItems();
+    private ArrayList<Item> items = new ArrayList<>();
+
     JPanel inventoryPanel = new JPanel();
     JPanel controlPanel = new JPanel();
 
@@ -26,7 +27,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     Color myColor = new Color(193, 234, 242);
 
     public InventoryAdmin() {
-        setSize(500, 600);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Inventory System");
@@ -75,16 +76,24 @@ public class InventoryAdmin extends JFrame implements ActionListener {
         btnDelete.addActionListener(this);
         btnRefresh.addActionListener(this);
         btnBack.addActionListener(this);
-        InventoryData.loadSampleItems();
+
+        loadSampleItems();
         refreshTable();
+
         add(inventoryPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
     }
-    
+
+    private void loadSampleItems() {
+        items.clear();
+        items.add(new Item("001", "Apple", 50, 10.0));
+        items.add(new Item("002", "Banana", 30, 5.0));
+        items.add(new Item("003", "Orange", 20, 8.5));
+    }
 
     private void refreshTable() {
         tableModel.setRowCount(0);
-        for (Item item : InventoryData.items) {
+        for (Item item : items) {
             tableModel.addRow(new Object[]{
                 item.getBarcode(),
                 item.getName(),
@@ -93,42 +102,26 @@ public class InventoryAdmin extends JFrame implements ActionListener {
             });
         }
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
-    	if (e.getSource() == btnAdd) {
-    	    String barcode = JOptionPane.showInputDialog("Enter barcode:");
-    	    String name = JOptionPane.showInputDialog("Enter item name:");
-    	    String stockStr = JOptionPane.showInputDialog("Enter stock quantity:");
-    	    String priceStr = JOptionPane.showInputDialog("Enter price:");
+        if (e.getSource() == btnAdd) {
+            String barcode = JOptionPane.showInputDialog("Enter barcode:");
+            String name = JOptionPane.showInputDialog("Enter item name:");
+            String stockStr = JOptionPane.showInputDialog("Enter stock quantity:");
+            String priceStr = JOptionPane.showInputDialog("Enter price:");
 
-    	    try {
-    	        int stock = Integer.parseInt(stockStr.trim());
-    	        double price = Double.parseDouble(priceStr.trim());
+            try {
+                int stock = Integer.parseInt(stockStr.trim());
+                double price = Double.parseDouble(priceStr.trim());
+                items.add(new Item(barcode.trim(), name.trim(), stock, price));
+                refreshTable();
+                JOptionPane.showMessageDialog(this, "Item added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
-    	        boolean merged = false;
-    	        for (Item item : InventoryData.items) {
-    	            if (item.getBarcode().equals(barcode.trim())) {
-    	                // ✅ Merge: update quantity and price
-    	                item.setStock(item.getStock() + stock);
-    	                item.setPrice(price); // Optional: update to latest price
-    	                merged = true;
-    	                break;
-    	            }
-    	        }
-
-    	        if (!merged) {
-    	            // ✅ Add new item if not found
-    	            InventoryData.items.add(new Item(barcode.trim(), name.trim(), stock, price));
-    	        }
-
-    	        refreshTable();
-    	        JOptionPane.showMessageDialog(this, merged ? "Item merged successfully!" : "Item added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-    	    } catch (Exception ex) {
-    	        JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
-    	    }
-    	} else if (e.getSource() == btnEdit) {
+        } else if (e.getSource() == btnEdit) {
             int selectedRow = inventoryTable.getSelectedRow();
             if (selectedRow != -1) {
                 Item item = items.get(selectedRow);
