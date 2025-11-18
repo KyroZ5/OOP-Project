@@ -1,8 +1,11 @@
 package posSystem;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -23,13 +26,14 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     JButton btnBack = new JButton("Back");
 
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
-    Color myColor = new Color(193, 234, 242);
+    Color myColor = new Color(100, 150, 135); 
 
     public InventoryAdmin() {
-        setSize(500, 600);
+        setSize(700, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Inventory System");
+        setUndecorated(true);
         setLayout(new BorderLayout());
         setIconImage(logo.getImage());
 
@@ -40,31 +44,39 @@ public class InventoryAdmin extends JFrame implements ActionListener {
             }
         };
         inventoryTable = new JTable(tableModel);
-        inventoryTable.setRowHeight(25);
-
+        inventoryTable.setRowHeight(50);
+        inventoryTable.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < inventoryTable.getColumnCount(); i++) {
             inventoryTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
+        JTableHeader header = inventoryTable.getTableHeader();
+        header.setPreferredSize(new Dimension(header.getWidth(), 50));
+        header.setFont(new Font("Segoe UI", Font.PLAIN, 30));
         JScrollPane scrollPane = new JScrollPane(inventoryTable);
 
+
+        Font titleFont = new Font("Segoe UI", Font.BOLD, 20); 
+        TitledBorder inventoryBorder = BorderFactory.createTitledBorder("Inventory List");
+        inventoryBorder.setTitleFont(titleFont);
         inventoryPanel.setLayout(new BorderLayout());
-        inventoryPanel.setBorder(BorderFactory.createTitledBorder("Inventory List"));
+        inventoryPanel.setBorder(inventoryBorder);
         inventoryPanel.add(scrollPane, BorderLayout.CENTER);
         inventoryPanel.setBackground(myColor);
 
         controlPanel.setLayout(new FlowLayout());
-        controlPanel.setBorder(BorderFactory.createTitledBorder("Admin Controls"));
+        controlPanel.setBorder(BorderFactory.createTitledBorder("Controls"));
+        Font titleFont1 = new Font("Segoe UI", Font.BOLD, 16); 
+        TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("Controls");
+        inventoryBorder1.setTitleFont(titleFont1);
+        
         controlPanel.setBackground(myColor);
-
         controlPanel.add(btnAdd);
         controlPanel.add(btnEdit);
         controlPanel.add(btnDelete);
         controlPanel.add(btnRefresh);
         controlPanel.add(btnBack);
-
         btnAdd.setEnabled(true);
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(true);
@@ -118,7 +130,6 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     	        }
 
     	        if (!merged) {
-    	            // ✅ Add new item if not found
     	            InventoryData.items.add(new Item(barcode.trim(), name.trim(), stock, price));
     	        }
 

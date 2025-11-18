@@ -25,8 +25,6 @@ public class Cashier extends JFrame implements ActionListener{
 
      JPanel leftPanel;   
      JPanel rightPanel;  
-
-
      JPanel headerPanel;
      JLabel lblDateTime;
      JLabel bLogo; 
@@ -97,147 +95,159 @@ public class Cashier extends JFrame implements ActionListener{
     }
 
     public Cashier() {
-        setUndecorated(true);
+    	setSize(1500,1000);
+    	setLocationRelativeTo(null);
+        setUndecorated(false);
         setTitle("Pentagram POS (Point-of-Sale) System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconImage(logo.getImage());
         getContentPane().setBackground(myColor);
-        setLayout(new BorderLayout(5, 5));
+    
 
-      
-        leftPanel = new JPanel(new BorderLayout(5, 5));
-        leftPanel.setBackground(myColor);
-
-        headerPanel = new JPanel(new BorderLayout());
+        // Header Panel
+        headerPanel = new JPanel(null);
         headerPanel.setBackground(myColor);
+        headerPanel.setBounds(20, 10, 1350, 100);
         bLogo = new JLabel(Logo);
-        bLogo.setPreferredSize(new Dimension(375, 105));
-        headerPanel.add(bLogo, BorderLayout.CENTER);
+        bLogo.setBounds(20, 10, 350, 80);
         lblDateTime = new JLabel();
-        lblDateTime.setHorizontalAlignment(SwingConstants.RIGHT);
         lblDateTime.setFont(new Font("Arial", Font.BOLD, 16));
         lblDateTime.setForeground(Color.BLACK);
-        headerPanel.add(lblDateTime, BorderLayout.EAST);
-        
-        Timer timer = new Timer(1000, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                String time = new SimpleDateFormat("hh:mm a").format(new Date());
-                lblDateTime.setText("<html><div style='text-align: right;'>" + date + "<br>" + time + "</div></html>");
-            }
+        lblDateTime.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblDateTime.setBounds(1150, 10, 180, 80);
+        headerPanel.add(bLogo);
+        headerPanel.add(lblDateTime);
+        add(headerPanel);
+
+        Timer timer = new Timer(1000, e -> {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String time = new SimpleDateFormat("hh:mm a").format(new Date());
+            lblDateTime.setText("<html><div style='text-align: right;'>" + date + "<br>" + time + "</div></html>");
         });
         timer.start();
-        leftPanel.add(headerPanel, BorderLayout.NORTH);
 
-   
-        transactionPanel = new JPanel(new BorderLayout());
+        // Transaction Panel
+        transactionPanel = new JPanel(null);
         transactionPanel.setBackground(myColor);
         transactionPanel.setBorder(BorderFactory.createTitledBorder("Transaction"));
-        transactionModel = new DefaultTableModel(new String[]{"Barcode", "Item Name", "Qty", "Price (₱)", "Subtotal (₱)"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) { return false; }
+        transactionPanel.setBounds(20, 120, 900, 500);	
+
+        transactionModel = new DefaultTableModel(
+            new String[]{"Barcode", "Item Name", "Qty", "Price (₱)", "Subtotal (₱)"}, 0) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
+
         transactionTable = new JTable(transactionModel);
-        transactionTable.setRowHeight(25);
+        transactionTable.setRowHeight(100);
+        transactionTable.setRowMargin(5);
+        transactionTable.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+        transactionTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        JTableHeader header = transactionTable.getTableHeader();
+        header.setPreferredSize(new Dimension(header.getWidth(), 50));
+        header.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+        
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < transactionTable.getColumnCount(); i++) {
             transactionTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            transactionTable.getColumnModel().getColumn(i).setPreferredWidth(180);
         }
+
         JScrollPane transScroll = new JScrollPane(transactionTable);
-        transactionPanel.add(transScroll, BorderLayout.CENTER);
-        leftPanel.add(transactionPanel, BorderLayout.CENTER);
-       
-        rightPanel = new JPanel(new BorderLayout(5, 5));
-        rightPanel.setBackground(myColor);
-        
-        paymentPanel = new JPanel();
-        paymentPanel.setLayout(new BoxLayout(paymentPanel, BoxLayout.Y_AXIS));
-        paymentPanel.setBorder(BorderFactory.createTitledBorder("Payment"));
+        transScroll.setBounds(10, 20, 880, 470);
+        transactionPanel.add(transScroll);
+        add(transactionPanel);
+
+        // Payment Panel
+        paymentPanel = new JPanel(null);
         paymentPanel.setBackground(myColor);
-        
-        barcodePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        barcodePanel.setBackground(myColor);
-        barcodePanel.add(lblBarcode);
-        barcodePanel.add(txtBarcode);
-        barcodePanel.add(btnAddItem);
-        barcodePanel.add(btnDeleteItem);
-        txtBarcode.addActionListener(this);
-        btnAddItem.addActionListener(this);
-        btnDeleteItem.addActionListener(this);
-        
-        qtyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        qtyPanel.setBackground(myColor);
-        qtyPanel.add(lblQty);
-        qtyPanel.add(txtQty);
-        qtyPanel.add(btnApplyQty);
-        btnApplyQty.addActionListener(this);
-        
-        cashInputPanel = new JPanel(new GridLayout(3, 1, 5, 5));
-        cashInputPanel.setBackground(myColor);
-        JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        totalPanel.setBackground(myColor);
-        totalPanel.add(lblTotal);
-        JPanel cashReceivedPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        cashReceivedPanel.setBackground(myColor);
-        cashReceivedPanel.add(lblCashReceived);
-        cashReceivedPanel.add(txtCashReceived);
-        cashReceivedPanel.add(btnProcessPayment);
-        cashReceivedPanel.add(btnReset);
-        JPanel balancePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        balancePanel.setBackground(myColor);
-        balancePanel.add(lblBalance);
-        cashInputPanel.add(totalPanel);
-        cashInputPanel.add(cashReceivedPanel);
-        cashInputPanel.add(balancePanel);
-        btnProcessPayment.addActionListener(this);
-        btnReset.addActionListener(this);
-        
+        paymentPanel.setBorder(BorderFactory.createTitledBorder("Payment"));
+        paymentPanel.setBounds(940, 120, 500, 350);
+
+        lblBarcode.setBounds(20, 30, 80, 25);
+        txtBarcode.setBounds(100, 30, 150, 25);
+        btnAddItem.setBounds(260, 30, 100, 25);
+        btnDeleteItem.setBounds(370, 30, 100, 25);
+        paymentPanel.add(lblBarcode);
+        paymentPanel.add(txtBarcode);
+        paymentPanel.add(btnAddItem);
+        paymentPanel.add(btnDeleteItem);
+
+        lblQty.setBounds(20, 70, 80, 25);
+        txtQty.setBounds(100, 70, 50, 25);
+        btnApplyQty.setBounds(160, 70, 120, 25);
+        paymentPanel.add(lblQty);
+        paymentPanel.add(txtQty);
+        paymentPanel.add(btnApplyQty);
+
+        lblTotal.setBounds(20, 110, 200, 25);
+        paymentPanel.add(lblTotal);
+
+        lblCashReceived.setBounds(20, 150, 100, 25);
+        txtCashReceived.setBounds(130, 150, 100, 25);
+        btnProcessPayment.setBounds(240, 150, 120, 25);
+        btnReset.setBounds(370, 150, 100, 25);
+        paymentPanel.add(lblCashReceived);
+        paymentPanel.add(txtCashReceived);
+        paymentPanel.add(btnProcessPayment);
+        paymentPanel.add(btnReset);
+
+        lblBalance.setBounds(20, 190, 200, 25);
+        paymentPanel.add(lblBalance);
+
         numPadPanel = new JPanel(new GridLayout(4, 3, 5, 5));
+        numPadPanel.setBounds(20, 230, 460, 100);
         numPadPanel.setBackground(myColor);
         String[] keys = {"7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "Clear"};
-        for(String key : keys) {
+        for (String key : keys) {
             JButton btn = new JButton(key);
             btn.setFont(new Font("Arial", Font.BOLD, 24));
-            btn.setPreferredSize(new Dimension(50, 50));
             btn.setFocusable(false);
             btn.addActionListener(this);
             numPadPanel.add(btn);
         }
-        logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        logoutPanel.setBackground(myColor);
-        logoutPanel.add(Box.createVerticalStrut(20));
-        logoutPanel.add(btnLogout);
-        btnLogout.addActionListener(this);
-   
-        paymentPanel.add(barcodePanel);
-        paymentPanel.add(qtyPanel);
-        paymentPanel.add(cashInputPanel);
         paymentPanel.add(numPadPanel);
-        paymentPanel.add(Box.createVerticalStrut(20));
-        paymentPanel.add(logoutPanel);
+        add(paymentPanel);
 
-        receiptPanel = new JPanel(new BorderLayout());
-        receiptPanel.setBorder(BorderFactory.createTitledBorder("Receipt"));
+        // Receipt Panel
+        receiptPanel = new JPanel(null);
         receiptPanel.setBackground(myColor);
+        receiptPanel.setBorder(BorderFactory.createTitledBorder("Receipt"));
+        receiptPanel.setBounds(940, 480, 500, 250);
+
         receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         receiptArea.setEditable(false);
-        JScrollPane recScroll = new JScrollPane(receiptArea);
-        recScroll.getViewport().setBackground(myColor);
-        receiptPanel.add(recScroll, BorderLayout.CENTER);
-        receiptPanel.add(btnPrintReceipt, BorderLayout.SOUTH);
+        receiptScroll = new JScrollPane(receiptArea);
+        receiptScroll.setBounds(10, 20, 480, 180);
+        receiptPanel.add(receiptScroll);
+
+        btnPrintReceipt.setBounds(370, 210, 120, 30);
+        receiptPanel.add(btnPrintReceipt);
+        add(receiptPanel);
+
+        // Logout Panel
+        logoutPanel = new JPanel(null);
+        logoutPanel.setBackground(myColor);
+        logoutPanel.setBounds(1320, 740, 120, 50);
+        btnLogout.setBounds(1400, 900, 120, 40);
+        logoutPanel.add(btnLogout);
+        add(logoutPanel);
+
+        // Listeners
+        txtBarcode.addActionListener(this);
+        btnAddItem.addActionListener(this);
+        btnDeleteItem.addActionListener(this);
+        btnApplyQty.addActionListener(this);
+        btnProcessPayment.addActionListener(this);
+        btnReset.addActionListener(this);
+        btnLogout.addActionListener(this);
         btnPrintReceipt.addActionListener(this);
 
-        rightPanel.add(paymentPanel, BorderLayout.NORTH);
-        rightPanel.add(receiptPanel, BorderLayout.CENTER);
-        
-     
-        add(leftPanel, BorderLayout.CENTER);
-        add(rightPanel, BorderLayout.EAST);
-        
         loadInventoryData();
-        
         receiptArea.setText("");
     }
     

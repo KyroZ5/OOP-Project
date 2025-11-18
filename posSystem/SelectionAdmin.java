@@ -43,7 +43,8 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 	JLabel lblCashier = new JLabel("Cashier");
 	JLabel lblAdmin = new JLabel("Accounts");
 	JLabel lblInven = new JLabel("Inventory");
-	Color myColor = new Color(100, 150, 70); 
+	//Color myColor = new Color(100, 150, 70); 
+	Color myColor = new Color(100, 150, 135);
     Font font = new Font("Montserrat", Font.BOLD, 15);
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     
