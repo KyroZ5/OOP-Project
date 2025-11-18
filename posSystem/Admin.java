@@ -18,7 +18,7 @@ public class Admin extends JFrame implements ActionListener {
     
     private DefaultTableModel tableModel;
     private JTable userTable;
-    private static final String FILE_NAME = "users.txt";
+   
 
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     
@@ -83,32 +83,31 @@ public class Admin extends JFrame implements ActionListener {
 
     private void loadUsers() {
         tableModel.setRowCount(0);
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = br.readLine()) != null) {
+        for	(int i = 0; i < Users.accts.size(); i++ ){
+            Users line;
+            while ((line = Users.accts.get(i)) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 3) { 
                     tableModel.addRow(new String[]{parts[0].trim(), parts[1].trim(), parts[2].trim()});
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+       
         }
     }
 
     private void saveUsersToFile() {
-        try (PrintWriter out = new PrintWriter(new FileWriter(FILE_NAME))) {
             for (int i = 0; i < tableModel.getRowCount(); i++) {
-                out.println(tableModel.getValueAt(i, 0) + "," 
+                println(tableModel.getValueAt(i, 0) + "," 
                           + tableModel.getValueAt(i, 1) + "," 
                           + tableModel.getValueAt(i, 2));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
 
-    @Override
+    private void println(String string) {
+		
+	}
+
+	@Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnAdd) {
             POSMain loginInstance = new POSMain();

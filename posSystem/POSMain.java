@@ -197,8 +197,8 @@ public class POSMain extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Fields cannot be empty", "Error", JOptionPane.WARNING_MESSAGE);
             } else {
                 for (int i = 0; i < Users.accts.size(); i++) {
-                    System.out.println(Users.accts.get(i).username + " " + Users.accts.get(i).password + " " + Users.accts.get(i).getEmployeeName());
-                    if (UserL.equals(Users.accts.get(i).username) && PassL.equals(Users.accts.get(i).password)) {
+                    System.out.println(Users.accts.get(i).username + " " + Users.accts.get(i).pass + " " + Users.accts.get(i).empName);
+                    if (UserL.equals(Users.accts.get(i).username) && PassL.equals(Users.accts.get(i).pass)) {
                         authenticated = true;    
                         JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
    

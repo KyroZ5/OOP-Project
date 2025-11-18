@@ -3,22 +3,22 @@ package posSystem;
 
 import java.util.*;
 
-public class Users {
-    public static ArrayList<Users> accts = new ArrayList<>();
-	String username;
-	String password; 
-        String employeeName;
-	Users(String username, String password, String employeeName){
+
+class Users {
+	public static ArrayList <Users> accts = new ArrayList<>();
+	String username, pass, empName;
+	private double balance;
+	Users (String username,String pass, String empName){
 		this.username = username;
-		this.password = password;
-		this.employeeName = employeeName;
+		this.pass = pass;
+		this.empName = empName;
 	}
 	public String getUsername() { 
 		return username; }
         public String getPassword() { 
-    	return password; }
+    	return pass; }
         public String getEmployeeName() { 
-    	return employeeName; }
+    	return empName; }
    
 
 	public void Users() {
@@ -31,4 +31,8 @@ public class Users {
          }
       } 
    }
+	public String[] split(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

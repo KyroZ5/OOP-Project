@@ -12,10 +12,9 @@ import java.io.*;
 import javax.swing.event.*;
 
 public class Add extends JFrame implements ActionListener, ItemListener, ChangeListener {
-
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private POSMain loginInstance;
-
+    
     JPanel p1 = new JPanel(); 
     JPanel p2 = new JPanel();
     Color myColor = new Color(193, 234, 242);
@@ -34,7 +33,7 @@ public class Add extends JFrame implements ActionListener, ItemListener, ChangeL
     Font font = new Font("Montserrat", Font.BOLD, 15);
     Font font2 = new Font("Montserrat", Font.BOLD, 20);
 
-    private static final String FILE_NAME = "users.txt"; 
+    	
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
 
     ImageIcon BLogo = new ImageIcon("./img/logo-dark-transparent.png");
@@ -106,12 +105,11 @@ public class Add extends JFrame implements ActionListener, ItemListener, ChangeL
 
         this.loginInstance = loginInstance; 
     }
-
-    public static void main(String[] args) {
-         POSMain loginInstance = new POSMain(); 
-        new Add(loginInstance).setVisible(true); 
-    }
-
+    
+   
+    
+    
+    
     @Override
     public void stateChanged(ChangeEvent e) {
         // TODO Auto-generated method stub
@@ -125,15 +123,15 @@ public class Add extends JFrame implements ActionListener, ItemListener, ChangeL
     @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnregLogin) {
-            String name = txtregName.getText().trim();
-            String user = txtregUsername.getText().trim();
+            String empName = txtregName.getText().trim();
+            String username = txtregUsername.getText().trim();
             String pass = new String(txtregPassword.getPassword()).trim();
 
-            if (!name.isEmpty() && !user.isEmpty() && !pass.isEmpty()) {
-                if (isUsernameTaken(user)) {
+            if (!empName.isEmpty() && !username.isEmpty() && !pass.isEmpty()) {
+                if (username == Users.accts.get(1).username) {
                     JOptionPane.showMessageDialog(null, "Username already exists! Please choose a different one.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    saveUserToFile(name, user, pass); 
+                	 Users.accts.add(new Users(username, pass, empName));   
                     JOptionPane.showMessageDialog(null, "User registered successfully!", "Registration", JOptionPane.INFORMATION_MESSAGE);
                     setVisible(false);
                 }
@@ -145,29 +143,6 @@ public class Add extends JFrame implements ActionListener, ItemListener, ChangeL
         }
     }
 
-    private boolean isUsernameTaken(String username) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length > 1 && parts[1].equals(username)) {
-                    return true; 
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+  
 
-    private void saveUserToFile(String name, String user, String pass) {
-        try (FileWriter fw = new FileWriter(FILE_NAME, true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-
-            out.println(name + "," + user + "," + pass); 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
