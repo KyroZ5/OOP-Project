@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 
 public class Admin extends JFrame implements ActionListener {
 
@@ -88,7 +87,7 @@ public class Admin extends JFrame implements ActionListener {
         }
     }
 
-    private void saveUsersToFile() {
+    private void saveUsers() {
         Users.accts.clear();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             String name = tableModel.getValueAt(i, 0).toString();
@@ -124,7 +123,7 @@ public class Admin extends JFrame implements ActionListener {
 
                         Users.accts.removeIf(u -> u.getUsername().equals(currentUsername));
                         Users.accts.add(new Users(newUsername, newPassword, newName));
-                        saveUsersToFile();
+                        saveUsers();
                         JOptionPane.showMessageDialog(this, "User updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
@@ -142,7 +141,7 @@ public class Admin extends JFrame implements ActionListener {
                     String usernameToDelete = tableModel.getValueAt(selectedRow, 1).toString();
                     tableModel.removeRow(selectedRow);
                     Users.accts.removeIf(u -> u.getUsername().equals(usernameToDelete));
-                    saveUsersToFile();
+                    saveUsers();
                     JOptionPane.showMessageDialog(this, "User deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(this, "Incorrect password! Deletion failed.", "Error", JOptionPane.ERROR_MESSAGE);

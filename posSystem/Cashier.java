@@ -1,11 +1,9 @@
-
 package posSystem;
 
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -245,35 +243,28 @@ public class Cashier extends JFrame implements ActionListener{
     
     private void loadInventoryData() {
         inventoryMap.clear();
-        String filename = "inventory.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if(parts.length == 4) {
-                    String barcode = parts[0].trim();
-                    String itemName = parts[1].trim();
-                    int stock = Integer.parseInt(parts[2].trim());
-                    double price = Double.parseDouble(parts[3].trim());
-                    inventoryMap.put(barcode, new InventoryItem(barcode, itemName, stock, price));
-                }
-            }
-        } catch(IOException ex) {
-            ex.printStackTrace();
+        for (Item item : InventoryData.getItems()) {
+            inventoryMap.put(item.getBarcode(), new InventoryItem(
+                item.getBarcode(),
+                item.getName(),
+                item.getStock(),
+                item.getPrice()
+            ));
         }
     }
     
     private void saveInventoryData() {
-        String filename = "inventory.txt";
-        try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
-            for(InventoryItem item : inventoryMap.values()) {
-                out.println(item.barcode + "," + item.itemName + "," + item.stock + "," + item.price);
+        for (InventoryItem item : inventoryMap.values()) {
+            for (Item invItem : InventoryData.getItems()) {
+                if (invItem.getBarcode().equals(item.barcode)) {
+                    invItem.setStock(item.stock);
+                    invItem.setPrice(item.price);
+                    break;
+                }
             }
-        } catch(IOException ex) {
-            ex.printStackTrace();
         }
     }
-   
+    
     private void addItemToTransaction(String barcode) {
         if(barcode.isEmpty()) return;
         if(!inventoryMap.containsKey(barcode)) {
@@ -329,27 +320,34 @@ public class Cashier extends JFrame implements ActionListener{
     
     private void processPayment() {
         double total = 0.0;
-        for(int i = 0; i < transactionModel.getRowCount(); i++) {
+        for (int i = 0; i < transactionModel.getRowCount(); i++) {
             String subStr = transactionModel.getValueAt(i, 4).toString().replace("₱", "");
             total += Double.parseDouble(subStr);
         }
+
         double cash;
         try {
             cash = Double.parseDouble(txtCashReceived.getText().trim());
-        } catch(NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid cash amount!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if(cash < total) {
+
+        if (cash < total) {
             JOptionPane.showMessageDialog(this, "Insufficient cash!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
         double balance = cash - total;
         lblBalance.setText("Balance: ₱" + String.format("%.2f", balance));
+        int transactionNo = TransacData.transData.size() + 1;
+        TransacData.transData.add(new TransacData(transactionNo, total));
+        JOptionPane.showMessageDialog(this, "Transaction recorded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         generateReceipt(total, cash, balance);
         updateInventoryAfterSale();
+
+        
     }
-    
  
     private void generateReceipt(double total, double cash, double balance) {
         receiptArea.setText("");

@@ -1,29 +1,23 @@
-
 package posSystem;
-
+import posSystem.TransacData;
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 
 public class TransactionHistory extends JFrame implements ActionListener {
 
-    JButton btnDel = new JButton("Delete");
     JButton btnRefresh = new JButton("Refresh");
     JButton btnLogout = new JButton("Back");
-    
+
     private DefaultTableModel tableModel;
     private JTable transacTable;
-   
 
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
-    
     Color myColor = new Color(193, 234, 242);
 
     public TransactionHistory() {
-        setSize(500, 600);
+        setSize(480, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Transaction History");
@@ -31,23 +25,18 @@ public class TransactionHistory extends JFrame implements ActionListener {
         setResizable(false);
         setIconImage(logo.getImage());
         getContentPane().setBackground(myColor);
-
-       
-        add(btnDel);
+        setUndecorated(true);
+        
         add(btnRefresh);
         add(btnLogout);
 
-      
-        btnDel.setBounds(190, 10, 80, 30);
-        btnRefresh.setBounds(280, 10, 80, 30);
-        btnLogout.setBounds(390, 10, 80, 30);
+        btnRefresh.setBounds(10, 510, 80, 30);
+        btnLogout.setBounds(390, 510, 80, 30);
 
-       
-        btnDel.addActionListener(this);
         btnRefresh.addActionListener(this);
         btnLogout.addActionListener(this);
-        
-        tableModel = new DefaultTableModel(new String[]{"Tansaction No.", "Date and Time", "Amount"}, 0) {
+
+        tableModel = new DefaultTableModel(new String[]{"Transaction No.", "Date and Time", "Amount"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -56,52 +45,36 @@ public class TransactionHistory extends JFrame implements ActionListener {
 
         transacTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(transacTable);
-        scrollPane.setBounds(10, 50, 460, 500);
+        scrollPane.setBounds(10, 50, 460, 450);
         add(scrollPane);
 
-        transacTable.getColumnModel().getColumn(2);
-
-        loadUsers();
+        loadTransactions();
     }
 
-    class PasswordRenderer extends DefaultTableCellRenderer {
-        private boolean showPasswords = false;
-        @Override
-        protected void setValue(Object value) {
-            setText((value != null && !showPasswords) ? "****" : value.toString());
-        }
-    }
-
-    private void loadUsers() {
+    private void loadTransactions() {
         tableModel.setRowCount(0);
-        for (Users user : Users.accts) {
-            tableModel.addRow(new String[]{
-                user.getEmployeeName(),
-                user.getUsername(),
-                user.getPassword()
+        for (TransacData t : TransacData.transData) {
+            tableModel.addRow(new Object[]{
+                t.getTransactionNo(),
+                t.getDateAndTime(),
+                "₱" + String.format("%.2f", t.getAmount())
             });
         }
     }
-
-    private void saveUsersToFile() {
-        Users.accts.clear();
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String name = tableModel.getValueAt(i, 0).toString();
-            String username = tableModel.getValueAt(i, 1).toString();
-            String password = tableModel.getValueAt(i, 2).toString();
-            Users.accts.add(new Users(username, password, name));
-        }
-    }
-
+    	
     @Override
     public void actionPerformed(ActionEvent ev) {
-          if (ev.getSource() == btnLogout) {
-            new SelectionAdmin().setVisible(true);
+       if (ev.getSource() == btnRefresh) {
+            loadTransactions();
+            JOptionPane.showMessageDialog(this, "List refreshed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else if (ev.getSource() == btnLogout) {
+            new SelectionCashier().setVisible(true);
             setVisible(false);
         }
     }
 
     public static void main(String[] args) {
-        new Admin().setVisible(true);
+        new TransactionHistory().setVisible(true);
     }
+    
 }
