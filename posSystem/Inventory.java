@@ -1,4 +1,3 @@
-
 package posSystem;
 
 import javax.swing.*;
@@ -6,10 +5,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.util.ArrayList;
 
 public class Inventory extends JFrame implements ActionListener {
-	
+
+    private ArrayList<Item> items = new ArrayList<>();
+
     JPanel inventoryPanel = new JPanel();
     JPanel controlPanel = new JPanel();
 
@@ -22,10 +23,7 @@ public class Inventory extends JFrame implements ActionListener {
     JButton btnRefresh = new JButton("Refresh List");
     JButton btnBack = new JButton("Back");
 
-    private static final String FILE_NAME = "inventory.txt"; 
-
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
-
     Color myColor = new Color(193, 234, 242);
 
     public Inventory() {
@@ -44,13 +42,13 @@ public class Inventory extends JFrame implements ActionListener {
         };
         inventoryTable = new JTable(tableModel);
         inventoryTable.setRowHeight(25);
-        
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < inventoryTable.getColumnCount(); i++) {
             inventoryTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-        
+
         JScrollPane scrollPane = new JScrollPane(inventoryTable);
 
         inventoryPanel.setLayout(new BorderLayout());
@@ -68,51 +66,40 @@ public class Inventory extends JFrame implements ActionListener {
         controlPanel.add(btnRefresh);
         controlPanel.add(btnBack);
 
-        btnAdd.setEnabled(false);        
-        btnEdit.setEnabled(false); 
-        btnDelete.setEnabled(false); 
-        btnRefresh.setEnabled(false); 
-        
+        btnAdd.setEnabled(true);
+        btnEdit.setEnabled(true);
+        btnDelete.setEnabled(true);
+        btnRefresh.setEnabled(true);
+
         btnAdd.addActionListener(this);
         btnEdit.addActionListener(this);
         btnDelete.addActionListener(this);
         btnRefresh.addActionListener(this);
         btnBack.addActionListener(this);
 
-        loadInventory();
+        loadSampleItems();
+        refreshTable();
 
         add(inventoryPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
     }
 
-    private void loadInventory() {
-        tableModel.setRowCount(0);
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 4) { 
-                    tableModel.addRow(new Object[]{parts[0].trim(), parts[1].trim(), parts[2].trim(), "₱" + parts[3].trim()});
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void loadSampleItems() {
+        items.clear();
+        items.add(new Item("001", "Apple", 50, 10.0));
+        items.add(new Item("002", "Banana", 30, 5.0));
+        items.add(new Item("003", "Orange", 20, 8.5));
     }
 
-    private void saveInventory() {
-        try (PrintWriter out = new PrintWriter(new FileWriter(FILE_NAME))) {
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                String price = tableModel.getValueAt(i, 3).toString().replace("₱", "");
-                out.println(
-                        tableModel.getValueAt(i, 0) + "," +
-                        tableModel.getValueAt(i, 1) + "," +
-                        tableModel.getValueAt(i, 2) + "," +
-                        price
-                );
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void refreshTable() {
+        tableModel.setRowCount(0);
+        for (Item item : items) {
+            tableModel.addRow(new Object[]{
+                item.getBarcode(),
+                item.getName(),
+                item.getStock(),
+                "₱" + item.getPrice()
+            });
         }
     }
 
@@ -120,88 +107,64 @@ public class Inventory extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnAdd) {
             String barcode = JOptionPane.showInputDialog("Enter barcode:");
-            String itemName = JOptionPane.showInputDialog("Enter item name:");
-            String stock = JOptionPane.showInputDialog("Enter stock quantity:");
-            String price = JOptionPane.showInputDialog("Enter price:");
+            String name = JOptionPane.showInputDialog("Enter item name:");
+            String stockStr = JOptionPane.showInputDialog("Enter stock quantity:");
+            String priceStr = JOptionPane.showInputDialog("Enter price:");
 
-            if (barcode != null && itemName != null && stock != null && price != null) {
-                tableModel.addRow(new Object[]{barcode.trim(), itemName.trim(), stock.trim(), "₱" + price.trim()});
-                saveInventory();
+            try {
+                int stock = Integer.parseInt(stockStr.trim());
+                double price = Double.parseDouble(priceStr.trim());
+                items.add(new Item(barcode.trim(), name.trim(), stock, price));
+                refreshTable();
                 JOptionPane.showMessageDialog(this, "Item added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         } else if (e.getSource() == btnEdit) {
             int selectedRow = inventoryTable.getSelectedRow();
             if (selectedRow != -1) {
-                String currentItem = tableModel.getValueAt(selectedRow, 1).toString();
-                String currentStock = tableModel.getValueAt(selectedRow, 2).toString();
-                String currentPrice = tableModel.getValueAt(selectedRow, 3).toString().replace("₱", "");
+                Item item = items.get(selectedRow);
+                String newName = JOptionPane.showInputDialog("Edit item name:", item.getName());
+                String newStockStr = JOptionPane.showInputDialog("Edit stock quantity:", item.getStock());
+                String newPriceStr = JOptionPane.showInputDialog("Edit price:", item.getPrice());
 
-                JPasswordField pf = new JPasswordField();
-                int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter admin password to confirm:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                
-                if (okCxl == JOptionPane.OK_OPTION) {
-                    String enteredPassword = new String(pf.getPassword());
-                    
-                    if (enteredPassword.equals("admin")) {
-                        String newItem = JOptionPane.showInputDialog("Edit item name:", currentItem);
-                        String newStock;
-                       
-                        while (true) {
-                            newStock = JOptionPane.showInputDialog("Edit stock quantity:", currentStock);
-                            
-                            if (newStock == null) {
-                                return; 
-                            }
-                            
-                            try {
-                                Integer.parseInt(newStock.trim());
-                                break; 
-                            } catch (NumberFormatException ex) {
-                                JOptionPane.showMessageDialog(this, "Invalid stock quantity! Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                        }
-
-                        String newPrice = JOptionPane.showInputDialog("Edit price:", currentPrice);
-                        
-                        if (newItem != null && newPrice != null) {
-                            tableModel.setValueAt(newItem.trim(), selectedRow, 1);
-                            tableModel.setValueAt(newStock.trim(), selectedRow, 2);
-                            tableModel.setValueAt("₱" + newPrice.trim(), selectedRow, 3);
-                            saveInventory();
-                            JOptionPane.showMessageDialog(this, "Item updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Incorrect password! Edit failed.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                try {
+                    item.setName(newName.trim());
+                    item.setStock(Integer.parseInt(newStockStr.trim()));
+                    item.setPrice(Double.parseDouble(newPriceStr.trim()));
+                    refreshTable();
+                    JOptionPane.showMessageDialog(this, "Item updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Select an item to edit.", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         } else if (e.getSource() == btnDelete) {
             int selectedRow = inventoryTable.getSelectedRow();
             if (selectedRow != -1) {
-                JPasswordField pf = new JPasswordField();
-                int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter admin password to confirm deletion:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                if (okCxl == JOptionPane.OK_OPTION) {
-                    String enteredPassword = new String(pf.getPassword());
-                    if (enteredPassword.equals("admin")) {
-                        tableModel.removeRow(selectedRow);
-                        saveInventory();
-                        JOptionPane.showMessageDialog(this, "Item deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Incorrect password! Deletion failed.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+                items.remove(selectedRow);
+                refreshTable();
+                JOptionPane.showMessageDialog(this, "Item deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Select an item to delete.", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         } else if (e.getSource() == btnRefresh) {
-            loadInventory();
+            refreshTable();
             JOptionPane.showMessageDialog(this, "Inventory refreshed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+
         } else if (e.getSource() == btnBack) {
-            new SelectionCashier().setVisible(true);
-            setVisible(false);
+        	SelectionCashier sc = new SelectionCashier();
+            sc.setVisible(true);
+            this.dispose();
         }
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
     public static void main(String[] args) {

@@ -172,7 +172,7 @@ public class POSMain extends JFrame implements ActionListener {
          });
     }
    
-	@Override
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnCancel) {
             int x = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Form", JOptionPane.YES_NO_OPTION);
@@ -180,43 +180,45 @@ public class POSMain extends JFrame implements ActionListener {
                 System.exit(0);
             }
         } else if (ev.getSource() == btnLogin) {
-            String UserL = txtUsername.getText().trim();
-            String PassL = new String(txtPassword.getPassword()).trim();
-            boolean authenticated = false;
-            boolean adminExists = false;
-            for (Users acc : Users.accts) {
-                if (acc.username.equals("admin")) {
-                    adminExists = true;
-                    break;
-                }	
-            }
-            if (!adminExists) {
-                Users.accts.add(new Users("admin", "admin", "Administrator"));
-            }
-            if (UserL.equals("") || PassL.equals("")) {
+            String userL = txtUsername.getText().trim();
+            String passL = new String(txtPassword.getPassword()).trim();
+
+            if (userL.isEmpty() || passL.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Fields cannot be empty", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            defaultAdminExists();
+            Users matchedUser = null;
+            for (Users acc : Users.accts) {
+                System.out.println(acc.getUsername() + " " + acc.getPassword() + " " + acc.getEmployeeName());
+                if (userL.equals(acc.getUsername()) && passL.equals(acc.getPassword())) {
+                    matchedUser = acc;
+                    break;
+                }
+            }
+            if (matchedUser != null) {
+                JOptionPane.showMessageDialog(null, "Welcome, " + matchedUser.getEmployeeName(), "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                if (matchedUser.getUsername().equalsIgnoreCase("admin")) {
+                    new SelectionAdmin().setVisible(true);
+                } else {
+                    new SelectionCashier().setVisible(true);
+                }
+                setVisible(false);
             } else {
-                for (int i = 0; i < Users.accts.size(); i++) {
-                    System.out.println(Users.accts.get(i).username + " " + Users.accts.get(i).pass + " " + Users.accts.get(i).empName);
-                    if (UserL.equals(Users.accts.get(i).username) && PassL.equals(Users.accts.get(i).pass)) {
-                        authenticated = true;    
-                        JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-   
-                        if (UserL.equalsIgnoreCase("admin") && PassL.equals("admin")) { 
-                            new SelectionAdmin().setVisible(true);
-                            setVisible(false);
-                            JOptionPane.showMessageDialog(null, "Welcome, " + UserL, "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-                            break;
-                        }
-                    }
-                }
-                if (!authenticated) {
-                    JOptionPane.showMessageDialog(null, "Invalid username or password!", "Invalid Login", JOptionPane.ERROR_MESSAGE);
-                }
+                JOptionPane.showMessageDialog(null, "Invalid username or password!", "Invalid Login", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
+    private void defaultAdminExists() {
+        for (Users acc : Users.accts) {
+            if (acc.getUsername().equals("admin")) {
+                return;
+            }
+        }
+        Users.accts.add(new Users("admin", "admin", "Administrator"));
+    }
  public static void main(String[] args) {
          
 	 POSMain pos = new POSMain();

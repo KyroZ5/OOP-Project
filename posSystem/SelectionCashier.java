@@ -99,8 +99,8 @@ public class SelectionCashier extends JFrame implements ActionListener{
 		
     }
     public static void main(String[] args) {
-    	SelectionCashier login = new SelectionCashier();
-        login.setVisible(true);
+    	SelectionCashier sc = new SelectionCashier();
+        sc.setVisible(true);
 	
     }
     @Override

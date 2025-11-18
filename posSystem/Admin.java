@@ -55,7 +55,7 @@ public class Admin extends JFrame implements ActionListener {
         tableModel = new DefaultTableModel(new String[]{"Name", "Username", "Password"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; 
+                return false;
             }
         };
 
@@ -70,76 +70,65 @@ public class Admin extends JFrame implements ActionListener {
     }
 
     class PasswordRenderer extends DefaultTableCellRenderer {
-        private boolean showPasswords = false; 
+        private boolean showPasswords = false;
         @Override
         protected void setValue(Object value) {
-            if (value != null && !showPasswords) {
-                setText("****");
-            } else if (value != null) {
-                setText(value.toString());
-            }
+            setText((value != null && !showPasswords) ? "****" : value.toString());
         }
     }
 
     private void loadUsers() {
         tableModel.setRowCount(0);
-        for	(int i = 0; i < Users.accts.size(); i++ ){
-            Users line;
-            while ((line = Users.accts.get(i)) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) { 
-                    tableModel.addRow(new String[]{parts[0].trim(), parts[1].trim(), parts[2].trim()});
-                }
-            }
-       
+        for (Users user : Users.accts) {
+            tableModel.addRow(new String[]{
+                user.getEmployeeName(),
+                user.getUsername(),
+                user.getPassword()
+            });
         }
     }
 
     private void saveUsersToFile() {
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                println(tableModel.getValueAt(i, 0) + "," 
-                          + tableModel.getValueAt(i, 1) + "," 
-                          + tableModel.getValueAt(i, 2));
-            }
+        Users.accts.clear();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String name = tableModel.getValueAt(i, 0).toString();
+            String username = tableModel.getValueAt(i, 1).toString();
+            String password = tableModel.getValueAt(i, 2).toString();
+            Users.accts.add(new Users(username, password, name));
         }
+    }
 
-    private void println(String string) {
-		
-	}
-
-	@Override
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnAdd) {
-            POSMain loginInstance = new POSMain();
-            new Add(loginInstance).setVisible(true);
+            new Add(null).setVisible(true);
         } else if (ev.getSource() == btnEdit) {
             int selectedRow = userTable.getSelectedRow();
             if (selectedRow != -1) {
                 String currentName = tableModel.getValueAt(selectedRow, 0).toString();
                 String currentUsername = tableModel.getValueAt(selectedRow, 1).toString();
                 String currentPassword = tableModel.getValueAt(selectedRow, 2).toString();
+
                 JPasswordField pf = new JPasswordField();
-                int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter user current password to confirm:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                if (okCxl == JOptionPane.OK_OPTION) {
-                    String enteredPassword = new String(pf.getPassword());
-                    if (enteredPassword.equals(currentPassword)) {
-                        String newName = JOptionPane.showInputDialog("Enter new name:", currentName);
-                        String newUsername = JOptionPane.showInputDialog("Enter new username:", currentUsername);
-                        JPasswordField pfNew = new JPasswordField();
-                        int okNew = JOptionPane.showConfirmDialog(this, pfNew, "Enter new password:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        if (okNew == JOptionPane.OK_OPTION) {
-                            String newPassword = new String(pfNew.getPassword());
-                            if (newName != null && newUsername != null && newPassword != null) {
-                                tableModel.setValueAt(newName, selectedRow, 0);
-                                tableModel.setValueAt(newUsername, selectedRow, 1);
-                                tableModel.setValueAt(newPassword, selectedRow, 2);
-                                saveUsersToFile();
-                                JOptionPane.showMessageDialog(this, "User updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Password confirmation failed.", "Error", JOptionPane.ERROR_MESSAGE);
+                int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter current password to confirm:", JOptionPane.OK_CANCEL_OPTION);
+                if (okCxl == JOptionPane.OK_OPTION && new String(pf.getPassword()).equals(currentPassword)) {
+                    String newName = JOptionPane.showInputDialog("Enter new name:", currentName);
+                    String newUsername = JOptionPane.showInputDialog("Enter new username:", currentUsername);
+                    JPasswordField pfNew = new JPasswordField();
+                    int okNew = JOptionPane.showConfirmDialog(this, pfNew, "Enter new password:", JOptionPane.OK_CANCEL_OPTION);
+                    if (okNew == JOptionPane.OK_OPTION) {
+                        String newPassword = new String(pfNew.getPassword());
+                        tableModel.setValueAt(newName, selectedRow, 0);
+                        tableModel.setValueAt(newUsername, selectedRow, 1);
+                        tableModel.setValueAt(newPassword, selectedRow, 2);
+
+                        Users.accts.removeIf(u -> u.getUsername().equals(currentUsername));
+                        Users.accts.add(new Users(newUsername, newPassword, newName));
+                        saveUsersToFile();
+                        JOptionPane.showMessageDialog(this, "User updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Password confirmation failed.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Select a user to edit.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -148,16 +137,15 @@ public class Admin extends JFrame implements ActionListener {
             int selectedRow = userTable.getSelectedRow();
             if (selectedRow != -1) {
                 JPasswordField pf = new JPasswordField();
-                int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter admin password to delete:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                if (okCxl == JOptionPane.OK_OPTION) {
-                    String enteredPassword = new String(pf.getPassword());
-                    if (enteredPassword.equals("admin")) {
-                        tableModel.removeRow(selectedRow);
-                        saveUsersToFile();
-                        JOptionPane.showMessageDialog(this, "User deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Incorrect password! Deletion failed.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                int okCxl = JOptionPane.showConfirmDialog(this, pf, "Enter admin password to delete:", JOptionPane.OK_CANCEL_OPTION);
+                if (okCxl == JOptionPane.OK_OPTION && new String(pf.getPassword()).equals("admin")) {
+                    String usernameToDelete = tableModel.getValueAt(selectedRow, 1).toString();
+                    tableModel.removeRow(selectedRow);
+                    Users.accts.removeIf(u -> u.getUsername().equals(usernameToDelete));
+                    saveUsersToFile();
+                    JOptionPane.showMessageDialog(this, "User deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Incorrect password! Deletion failed.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Select a user to delete.", "Error", JOptionPane.ERROR_MESSAGE);

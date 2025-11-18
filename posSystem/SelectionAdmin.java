@@ -114,8 +114,8 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 		
     }
 	public static void main(String[] args) {
-    	SelectionAdmin login = new SelectionAdmin();
-        login.setVisible(true);
+    	SelectionAdmin sa = new SelectionAdmin();
+        sa.setVisible(true);
 	
     }
     @Override

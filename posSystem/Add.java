@@ -1,19 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package posSystem;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.io.*;
-import javax.swing.event.*;
 
-public class Add extends JFrame implements ActionListener, ItemListener, ChangeListener {
+public class Add extends JFrame implements ActionListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private POSMain loginInstance;
     
     JPanel p1 = new JPanel(); 
     JPanel p2 = new JPanel();
@@ -103,21 +95,7 @@ public class Add extends JFrame implements ActionListener, ItemListener, ChangeL
         btnregLogin.setFont(font);
         btnregLogin.addActionListener(this);
 
-        this.loginInstance = loginInstance; 
-    }
-    
-   
-    
-    
-    
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        // TODO Auto-generated method stub
-    }
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -128,21 +106,26 @@ public class Add extends JFrame implements ActionListener, ItemListener, ChangeL
             String pass = new String(txtregPassword.getPassword()).trim();
 
             if (!empName.isEmpty() && !username.isEmpty() && !pass.isEmpty()) {
-                if (username == Users.accts.get(1).username) {
-                    JOptionPane.showMessageDialog(null, "Username already exists! Please choose a different one.", "Error", JOptionPane.ERROR_MESSAGE);
+                boolean exists = false;
+                for (Users u : Users.accts) {
+                    if (u.getUsername().equals(username)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (exists) {
+                    JOptionPane.showMessageDialog(this, "Username already exists! Please choose a different one.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                	 Users.accts.add(new Users(username, pass, empName));   
-                    JOptionPane.showMessageDialog(null, "User registered successfully!", "Registration", JOptionPane.INFORMATION_MESSAGE);
+                    Users.accts.add(new Users(username, pass, empName));
+                    JOptionPane.showMessageDialog(this, "User registered successfully!", "Registration", JOptionPane.INFORMATION_MESSAGE);
                     setVisible(false);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }else if (ev.getSource() == btnregCancel) {
-   	        setVisible(false);
+        } else if (ev.getSource() == btnregCancel) {
+            setVisible(false);
         }
     }
-
-  
-
 }

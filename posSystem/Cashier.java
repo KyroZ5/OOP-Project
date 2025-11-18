@@ -2,20 +2,14 @@
 package posSystem;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.table.*;
-
-import posSystem.AdminCashier.InventoryItem;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -27,7 +21,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.JobName;
 
-public class Cashier extends JFrame implements ActionListener, ItemListener, ChangeListener {
+public class Cashier extends JFrame implements ActionListener{
 
      Color myColor = new Color(193, 234, 242);
 
@@ -323,15 +317,6 @@ public class Cashier extends JFrame implements ActionListener, ItemListener, Cha
             JOptionPane.showMessageDialog(this, "Select an item to delete.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void increaseQuantity() {
-       
-    }
-    
-    private void decreaseQuantity() {
-
-    }
-    
     private void updateTotal() {
         double total = 0.0;
         for(int i = 0; i < transactionModel.getRowCount(); i++) {
@@ -533,13 +518,7 @@ public class Cashier extends JFrame implements ActionListener, ItemListener, Cha
             }
         }
     }
-    
-    @Override
-    public void itemStateChanged(ItemEvent e) { }
-    
-    @Override
-    public void stateChanged(ChangeEvent e) { }
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Cashier pos = new Cashier();
