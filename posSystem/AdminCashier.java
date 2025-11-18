@@ -1,4 +1,5 @@
 package posSystem;
+
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.table.*;
