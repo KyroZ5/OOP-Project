@@ -114,7 +114,9 @@ public class SelectionCashier extends JFrame implements ActionListener{
    	        login.setVisible(true);
    	        setVisible(false);
    		}else if(ev.getSource()==btnTransaction) {
-        	
+        	TransactionHistory transac = new TransactionHistory();
+        	 transac.setVisible(true);
+                 setVisible(false);
         	  
         }else if(ev.getSource()==btnOut) {
               int x = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Logging out", JOptionPane.YES_NO_OPTION);

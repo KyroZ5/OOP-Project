@@ -9,11 +9,11 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 	JPanel newLogin = new JPanel();
 
 	ImageIcon MLogo = new ImageIcon("./img/logo-light-transparent.png");
-    Image img = MLogo.getImage();
-    Image newLogo = img.getScaledInstance(130, 30, Image.SCALE_SMOOTH);
-    ImageIcon Logo = new ImageIcon(newLogo);
-    JLabel mLogo = new JLabel();
-    ImageIcon mlogo = new ImageIcon("./img/logo-icon-dark-transparent.png");
+        Image img = MLogo.getImage();
+        Image newLogo = img.getScaledInstance(130, 30, Image.SCALE_SMOOTH);
+        ImageIcon Logo = new ImageIcon(newLogo);
+        JLabel mLogo = new JLabel();
+        ImageIcon mlogo = new ImageIcon("./img/logo-icon-dark-transparent.png");
 	
 	ImageIcon ALogo = new ImageIcon("./img/Transaction.png");
 	Image imgA = ALogo.getImage();
@@ -136,8 +136,9 @@ public class SelectionAdmin extends JFrame implements ActionListener{
    	        setVisible(false);
    			
    		}else if(ev.getSource()==btnTransaction) {
-        	
-        	  
+        	TransactionHistoryAdmin transac = new TransactionHistoryAdmin();
+        	 transac.setVisible(true);
+                 setVisible(false);
         }else if(ev.getSource()==btnOut) {
               int x = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Logging out", JOptionPane.YES_NO_OPTION);
               if (x == JOptionPane.YES_OPTION) {
