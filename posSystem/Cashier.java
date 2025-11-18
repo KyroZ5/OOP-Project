@@ -245,35 +245,28 @@ public class Cashier extends JFrame implements ActionListener{
     
     private void loadInventoryData() {
         inventoryMap.clear();
-        String filename = "inventory.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if(parts.length == 4) {
-                    String barcode = parts[0].trim();
-                    String itemName = parts[1].trim();
-                    int stock = Integer.parseInt(parts[2].trim());
-                    double price = Double.parseDouble(parts[3].trim());
-                    inventoryMap.put(barcode, new InventoryItem(barcode, itemName, stock, price));
-                }
-            }
-        } catch(IOException ex) {
-            ex.printStackTrace();
+        for (Item item : InventoryData.getItems()) {
+            inventoryMap.put(item.getBarcode(), new InventoryItem(
+                item.getBarcode(),
+                item.getName(),
+                item.getStock(),
+                item.getPrice()
+            ));
         }
     }
     
     private void saveInventoryData() {
-        String filename = "inventory.txt";
-        try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
-            for(InventoryItem item : inventoryMap.values()) {
-                out.println(item.barcode + "," + item.itemName + "," + item.stock + "," + item.price);
+        for (InventoryItem item : inventoryMap.values()) {
+            for (Item invItem : InventoryData.getItems()) {
+                if (invItem.getBarcode().equals(item.barcode)) {
+                    invItem.setStock(item.stock);
+                    invItem.setPrice(item.price);
+                    break;
+                }
             }
-        } catch(IOException ex) {
-            ex.printStackTrace();
         }
     }
-   
+    
     private void addItemToTransaction(String barcode) {
         if(barcode.isEmpty()) return;
         if(!inventoryMap.containsKey(barcode)) {

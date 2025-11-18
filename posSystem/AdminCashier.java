@@ -1,17 +1,13 @@
 package posSystem;
 import javax.swing.*;
 import javax.swing.Timer;
-import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -23,7 +19,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.JobName;
 
-public class AdminCashier extends JFrame implements ActionListener, ItemListener, ChangeListener {
+public class AdminCashier extends JFrame implements ActionListener {
 
      Color myColor = new Color(193, 234, 242);
 
@@ -244,38 +240,29 @@ public class AdminCashier extends JFrame implements ActionListener, ItemListener
         
         receiptArea.setText("");
     }
-    
     private void loadInventoryData() {
         inventoryMap.clear();
-        String filename = "inventory.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if(parts.length == 4) {
-                    String barcode = parts[0].trim();
-                    String itemName = parts[1].trim();
-                    int stock = Integer.parseInt(parts[2].trim());
-                    double price = Double.parseDouble(parts[3].trim());
-                    inventoryMap.put(barcode, new InventoryItem(barcode, itemName, stock, price));
-                }
-            }
-        } catch(IOException ex) {
-            ex.printStackTrace();
+        for (Item item : InventoryData.getItems()) {
+            inventoryMap.put(item.getBarcode(), new InventoryItem(
+                item.getBarcode(),
+                item.getName(),
+                item.getStock(),
+                item.getPrice()
+            ));
         }
     }
     
     private void saveInventoryData() {
-        String filename = "inventory.txt";
-        try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
-            for(InventoryItem item : inventoryMap.values()) {
-                out.println(item.barcode + "," + item.itemName + "," + item.stock + "," + item.price);
+        for (InventoryItem item : inventoryMap.values()) {
+            for (Item invItem : InventoryData.getItems()) {
+                if (invItem.getBarcode().equals(item.barcode)) {
+                    invItem.setStock(item.stock);
+                    invItem.setPrice(item.price);
+                    break;
+                }
             }
-        } catch(IOException ex) {
-            ex.printStackTrace();
         }
     }
-   
     private void addItemToTransaction(String barcode) {
         if(barcode.isEmpty()) return;
         if(!inventoryMap.containsKey(barcode)) {
@@ -318,14 +305,6 @@ public class AdminCashier extends JFrame implements ActionListener, ItemListener
         } else {
             JOptionPane.showMessageDialog(this, "Select an item to delete.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    
-    private void increaseQuantity() {
-       
-    }
-    
-    private void decreaseQuantity() {
-
     }
     
     private void updateTotal() {
@@ -530,12 +509,6 @@ public class AdminCashier extends JFrame implements ActionListener, ItemListener
         }
     }
     
-    @Override
-    public void itemStateChanged(ItemEvent e) { }
-    
-    @Override
-    public void stateChanged(ChangeEvent e) { }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             AdminCashier pos = new AdminCashier();
