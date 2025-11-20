@@ -9,7 +9,7 @@ public class Add extends JFrame implements ActionListener {
     
     JPanel p1 = new JPanel(); 
     JPanel p2 = new JPanel();
-    Color myColor = new Color(193, 234, 242);
+    Color myColor = new Color(100, 150, 135); 
     
     JLabel lblregName = new JLabel("Name: ");
     JLabel lblregUsername = new JLabel("Username: ");
@@ -28,7 +28,7 @@ public class Add extends JFrame implements ActionListener {
     	
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
 
-    ImageIcon BLogo = new ImageIcon("./img/logo-dark-transparent.png");
+    ImageIcon BLogo = new ImageIcon("./img/logo-light-transparent.png");
     Image img = BLogo.getImage();
     Image newLogo = img.getScaledInstance(350, 80, java.awt.Image.SCALE_SMOOTH);
     ImageIcon Logo = new ImageIcon(newLogo);
@@ -36,15 +36,16 @@ public class Add extends JFrame implements ActionListener {
     JLabel newRegis = new JLabel("Register New Account");
 
     public Add(POSMain loginInstance) {
-        setSize(450, 400);
+        setSize(420, 380);
         setLocationRelativeTo(null);
         setTitle("Account Creation Form");
         setLayout(null);
         setResizable(false);
         setIconImage(logo.getImage());
         getContentPane().setBackground(Color.WHITE);
-
-        p2.setBounds(0, 0, 450, 130);
+        setUndecorated(true);
+        
+        p2.setBounds(0, 0, 450, 230);
         p2.setLayout(null);
         p2.setBorder(BorderFactory.createTitledBorder(""));
         p2.setBackground(myColor);
@@ -113,19 +114,21 @@ public class Add extends JFrame implements ActionListener {
                         break;
                     }
                 }
-
                 if (exists) {
                     JOptionPane.showMessageDialog(this, "Username already exists! Please choose a different one.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     Users.accts.add(new Users(username, pass, empName));
                     JOptionPane.showMessageDialog(this, "User registered successfully!", "Registration", JOptionPane.INFORMATION_MESSAGE);
-                    setVisible(false);
+                    new Admin().setVisible(true);
+                	this.dispose();
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else if (ev.getSource() == btnregCancel) {
-            setVisible(false);
+        	new Admin().setVisible(true);
+        	this.dispose();
+            
         }
     }
 }

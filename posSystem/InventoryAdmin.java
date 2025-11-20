@@ -5,7 +5,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     Color myColor = new Color(100, 150, 135); 
 
     public InventoryAdmin() {
-        setSize(700, 600);
+        setSize(700, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Inventory System");
@@ -65,18 +64,26 @@ public class InventoryAdmin extends JFrame implements ActionListener {
         inventoryPanel.add(scrollPane, BorderLayout.CENTER);
         inventoryPanel.setBackground(myColor);
 
-        controlPanel.setLayout(new FlowLayout());
-        controlPanel.setBorder(BorderFactory.createTitledBorder("Controls"));
         Font titleFont1 = new Font("Segoe UI", Font.BOLD, 16); 
         TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("Controls");
         inventoryBorder1.setTitleFont(titleFont1);
-        
+        controlPanel.setLayout(null);
+        controlPanel.setPreferredSize(new Dimension(700, 80)); // Ensure space for buttons
+        controlPanel.setBorder(inventoryBorder1);
         controlPanel.setBackground(myColor);
+        
+        btnAdd.setBounds(20, 25, 120, 40);
+        btnEdit.setBounds(150, 25, 120, 40);
+        btnDelete.setBounds(280, 25, 120, 40);
+        btnRefresh.setBounds(410, 25, 120, 40);
+        btnBack.setBounds(560, 25, 120	, 40);
+        
         controlPanel.add(btnAdd);
         controlPanel.add(btnEdit);
         controlPanel.add(btnDelete);
         controlPanel.add(btnRefresh);
         controlPanel.add(btnBack);
+        
         btnAdd.setEnabled(true);
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(true);
@@ -87,6 +94,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
         btnDelete.addActionListener(this);
         btnRefresh.addActionListener(this);
         btnBack.addActionListener(this);
+        
         InventoryData.loadSampleItems();
         refreshTable();
         add(inventoryPanel, BorderLayout.CENTER);
@@ -183,9 +191,5 @@ public class InventoryAdmin extends JFrame implements ActionListener {
 
     public ArrayList<Item> getItems() {
         return items;
-    }
-
-    public static void main(String[] args) {
-        new Inventory().setVisible(true);
     }
 }

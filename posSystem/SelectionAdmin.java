@@ -9,11 +9,11 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 	JPanel newLogin = new JPanel();
 
 	ImageIcon MLogo = new ImageIcon("./img/logo-light-transparent.png");
-        Image img = MLogo.getImage();
-        Image newLogo = img.getScaledInstance(130, 30, Image.SCALE_SMOOTH);
-        ImageIcon Logo = new ImageIcon(newLogo);
-        JLabel mLogo = new JLabel();
-        ImageIcon mlogo = new ImageIcon("./img/logo-icon-dark-transparent.png");
+    Image img = MLogo.getImage();
+    Image newLogo = img.getScaledInstance(130, 30, Image.SCALE_SMOOTH);
+    ImageIcon Logo = new ImageIcon(newLogo);
+    JLabel mLogo = new JLabel();
+    ImageIcon mlogo = new ImageIcon("./img/logo-icon-dark-transparent.png");
 	
 	ImageIcon ALogo = new ImageIcon("./img/Transaction.png");
 	Image imgA = ALogo.getImage();
@@ -113,11 +113,6 @@ public class SelectionAdmin extends JFrame implements ActionListener{
 	    btnInventory.addActionListener(this);
 		
 		
-    }
-	public static void main(String[] args) {
-    	SelectionAdmin sa = new SelectionAdmin();
-        sa.setVisible(true);
-	
     }
     @Override
    	public void actionPerformed(ActionEvent ev) {

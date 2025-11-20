@@ -14,6 +14,7 @@ public class Users {
         this.pass = pass;
         this.empName = empName;
     }
+    
     public static boolean isAdmin(){return Admin;}
     public String getUsername() { return username; }
     public String getPassword() { return pass; }

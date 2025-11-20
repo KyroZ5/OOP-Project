@@ -218,7 +218,6 @@ public class POSMain extends JFrame implements ActionListener {
         Users.accts.add(new Users("admin", "admin", "Administrator"));
     }
  public static void main(String[] args) {
-         
 	 POSMain pos = new POSMain();
      pos.setVisible(true);
  	}

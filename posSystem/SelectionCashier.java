@@ -3,8 +3,6 @@ package posSystem;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.event.*;
-
 
 public class SelectionCashier extends JFrame implements ActionListener{
 	
@@ -97,11 +95,6 @@ public class SelectionCashier extends JFrame implements ActionListener{
 	    btnInventory.addActionListener(this);
 		
 		
-    }
-    public static void main(String[] args) {
-    	SelectionCashier sc = new SelectionCashier();
-        sc.setVisible(true);
-	
     }
     @Override
    	public void actionPerformed(ActionEvent ev) {

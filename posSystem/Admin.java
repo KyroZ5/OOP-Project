@@ -17,14 +17,13 @@ public class Admin extends JFrame implements ActionListener {
     
     private DefaultTableModel tableModel;
     private JTable userTable;
-   
-
+ 
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     
-    Color myColor = new Color(193, 234, 242);
+    Color myColor = new Color(100, 150, 135); 
 
     public Admin() {
-        setSize(500, 600);
+        setSize(480, 510);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Admin");
@@ -32,7 +31,8 @@ public class Admin extends JFrame implements ActionListener {
         setResizable(false);
         setIconImage(logo.getImage());
         getContentPane().setBackground(myColor);
-
+        setUndecorated(true);
+        
         add(btnAdd);
         add(btnEdit);
         add(btnDel);
@@ -57,10 +57,11 @@ public class Admin extends JFrame implements ActionListener {
                 return false;
             }
         };
-
         userTable = new JTable(tableModel);
+        userTable.setRowHeight(50);
+        userTable.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         JScrollPane scrollPane = new JScrollPane(userTable);
-        scrollPane.setBounds(10, 50, 460, 500);
+        scrollPane.setBounds(10, 50, 460, 450);
         add(scrollPane);
 
         userTable.getColumnModel().getColumn(2).setCellRenderer(new PasswordRenderer());
@@ -101,6 +102,7 @@ public class Admin extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnAdd) {
             new Add(null).setVisible(true);
+            this.dispose();
         } else if (ev.getSource() == btnEdit) {
             int selectedRow = userTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -156,9 +158,5 @@ public class Admin extends JFrame implements ActionListener {
             new SelectionAdmin().setVisible(true);
             setVisible(false);
         }
-    }
-
-    public static void main(String[] args) {
-        new Admin().setVisible(true);
     }
 }
