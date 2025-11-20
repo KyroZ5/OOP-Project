@@ -196,8 +196,10 @@ public class POSMain extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Welcome, " + matchedUser.getEmployeeName(), "Login Successful", JOptionPane.INFORMATION_MESSAGE);
 
                 if (matchedUser.getUsername().equalsIgnoreCase("admin")) {
+                    Users.setAdmin(true);
                     new SelectionAdmin().setVisible(true);
                 } else {
+                    Users.setAdmin(false);
                     new SelectionCashier().setVisible(true);
                 }
                 setVisible(false);

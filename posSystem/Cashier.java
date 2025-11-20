@@ -232,8 +232,8 @@ public class Cashier extends JFrame implements ActionListener{
         // Logout Panel
         logoutPanel = new JPanel(null);
         logoutPanel.setBackground(myColor);
-        logoutPanel.setBounds(1320, 740, 120, 50);
-        btnLogout.setBounds(1400, 900, 120, 40);
+        logoutPanel.setBounds(1320, 500, 120, 50);
+        btnLogout.setBounds(1400, 800, 120, 40);
         logoutPanel.add(btnLogout);
         add(logoutPanel);
 
@@ -492,8 +492,12 @@ public class Cashier extends JFrame implements ActionListener{
             printReceiptDirect();
         }
         else if(src == btnLogout) {
+            if (Users.isAdmin()){
+            new SelectionAdmin().setVisible(true);
+            dispose();
+            } else {
             new SelectionCashier().setVisible(true);
-            setVisible(false);
+            setVisible(false);}
         }
         else if(src == btnApplyQty) {
             applyQuantityAdjustment();
