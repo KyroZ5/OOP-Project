@@ -21,7 +21,7 @@ import javax.print.attribute.standard.JobName;
 
 public class Cashier extends JFrame implements ActionListener{
 
-     Color myColor = new Color(193, 234, 242);
+	 Color myColor = new Color(100, 150, 135); 
 
      JPanel leftPanel;   
      JPanel rightPanel;  
@@ -80,7 +80,7 @@ public class Cashier extends JFrame implements ActionListener{
     }
 
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
-    ImageIcon BLogo = new ImageIcon("./img/logo-dark-transparent.png");
+    ImageIcon BLogo = new ImageIcon("./img/logo-light-transparent.png");
     Image img = BLogo.getImage();
     Image newLogo = img.getScaledInstance(350, 80, Image.SCALE_SMOOTH);
     ImageIcon Logo = new ImageIcon(newLogo);
@@ -95,9 +95,9 @@ public class Cashier extends JFrame implements ActionListener{
     }
 
     public Cashier() {
-    	setSize(1500,1000);
+    	setSize(1450,800);
     	setLocationRelativeTo(null);
-        setUndecorated(false);
+        setUndecorated(true);
         setTitle("Pentagram POS (Point-of-Sale) System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -139,7 +139,6 @@ public class Cashier extends JFrame implements ActionListener{
                 return false;
             }
         };
-
         transactionTable = new JTable(transactionModel);
         transactionTable.setRowHeight(100);
         transactionTable.setRowMargin(5);
@@ -233,7 +232,7 @@ public class Cashier extends JFrame implements ActionListener{
         logoutPanel = new JPanel(null);
         logoutPanel.setBackground(myColor);
         logoutPanel.setBounds(1320, 500, 120, 50);
-        btnLogout.setBounds(1400, 800, 120, 40);
+        btnLogout.setBounds(1300, 750, 120, 40);
         logoutPanel.add(btnLogout);
         add(logoutPanel);
 
@@ -351,14 +350,14 @@ public class Cashier extends JFrame implements ActionListener{
         double balance = cash - total;
         lblBalance.setText("Balance: ₱" + String.format("%.2f", balance));
         int transactionNo = TransacData.transData.size() + 1;
-        TransacData.transData.add(new TransacData(transactionNo, total));
+        TransacData.transData.add(new TransacData(transactionNo, total, balance));
         JOptionPane.showMessageDialog(this, "Transaction recorded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         generateReceipt(total, cash, balance);
         updateInventoryAfterSale();
 
-        
+
+        	
     }
- 
     private void generateReceipt(double total, double cash, double balance) {
         receiptArea.setText("");
         
@@ -495,10 +494,11 @@ public class Cashier extends JFrame implements ActionListener{
         else if(src == btnLogout) {
             if (Users.isAdmin()){
             new SelectionAdmin().setVisible(true);
-            dispose();
+            this.dispose();
             } else {
             new SelectionCashier().setVisible(true);
-            setVisible(false);}
+            this.dispose();
+            }
         }
         else if(src == btnApplyQty) {
             applyQuantityAdjustment();
@@ -531,4 +531,8 @@ public class Cashier extends JFrame implements ActionListener{
             }
         }
     }
+    public static void main(String[] args) {
+   	 Cashier pos = new Cashier();
+        pos.setVisible(true);
+    	}
 }

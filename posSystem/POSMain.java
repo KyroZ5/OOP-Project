@@ -16,7 +16,7 @@ public class POSMain extends JFrame implements ActionListener {
     JLabel lblPassword = new JLabel(" ");
     JTextField txtUsername = new JTextField(15);
     JPasswordField txtPassword = new JPasswordField(15);   
-    Color myColor = new Color(100, 150, 70); 
+    Color myColor = new Color(100, 150, 135); 
     JButton btnLogin = new JButton("Login");
     JButton btnCancel = new JButton("Exit");
     
@@ -198,9 +198,11 @@ public class POSMain extends JFrame implements ActionListener {
 
                 if (matchedUser.getUsername().equalsIgnoreCase("admin")) {
                     Users.setAdmin(true);
+                    Users.setStaff("Administrator");
                     new SelectionAdmin().setVisible(true);
                 } else {
                     Users.setAdmin(false);
+                    Users.setStaff(matchedUser.getEmployeeName());
                     new SelectionCashier().setVisible(true);
                 }
                 Users.setStaff(matchedUser.getEmployeeName());

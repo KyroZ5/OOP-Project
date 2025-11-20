@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class InventoryAdmin extends JFrame implements ActionListener {
 
 	ArrayList<Item> items = InventoryData.getItems();
+	JPanel logoPanel = new JPanel();
     JPanel inventoryPanel = new JPanel();
     JPanel controlPanel = new JPanel();
 
@@ -23,18 +24,29 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     JButton btnDelete = new JButton("Delete Item");
     JButton btnRefresh = new JButton("Refresh List");
     JButton btnBack = new JButton("Back");
+    
+    ImageIcon BLogo = new ImageIcon("./img/logo-light-transparent.png");
+    Image img = BLogo.getImage();
+    Image newLogo = img.getScaledInstance(350, 80, Image.SCALE_SMOOTH);
+    ImageIcon Logo = new ImageIcon(newLogo);
+    JLabel bLogo = new JLabel();
 
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     Color myColor = new Color(100, 150, 135); 
 
     public InventoryAdmin() {
-        setSize(700, 700);
+        setSize(900, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Inventory System");
         setUndecorated(true);
         setLayout(new BorderLayout());
         setIconImage(logo.getImage());
+        
+        logoPanel.add(bLogo);
+        logoPanel.setBackground(myColor);
+        bLogo.setBounds(50, -5, 375, 105);
+        bLogo.setIcon(Logo);
 
         tableModel = new DefaultTableModel(new String[]{"Barcode", "Item Name", "Stock", "Price (₱)"}, 0) {
             @Override
@@ -57,7 +69,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
 
 
         Font titleFont = new Font("Segoe UI", Font.BOLD, 20); 
-        TitledBorder inventoryBorder = BorderFactory.createTitledBorder("Inventory List");
+        TitledBorder inventoryBorder = BorderFactory.createTitledBorder("INVENTORY");
         inventoryBorder.setTitleFont(titleFont);
         inventoryPanel.setLayout(new BorderLayout());
         inventoryPanel.setBorder(inventoryBorder);
@@ -65,7 +77,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
         inventoryPanel.setBackground(myColor);
 
         Font titleFont1 = new Font("Segoe UI", Font.BOLD, 16); 
-        TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("Controls");
+        TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("CONTROLS");
         inventoryBorder1.setTitleFont(titleFont1);
         controlPanel.setLayout(null);
         controlPanel.setPreferredSize(new Dimension(700, 80)); // Ensure space for buttons
@@ -76,7 +88,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
         btnEdit.setBounds(150, 25, 120, 40);
         btnDelete.setBounds(280, 25, 120, 40);
         btnRefresh.setBounds(410, 25, 120, 40);
-        btnBack.setBounds(560, 25, 120	, 40);
+        btnBack.setBounds(740, 25, 120	, 40);
         
         controlPanel.add(btnAdd);
         controlPanel.add(btnEdit);
@@ -97,6 +109,7 @@ public class InventoryAdmin extends JFrame implements ActionListener {
         
         InventoryData.loadSampleItems();
         refreshTable();
+        add(logoPanel, BorderLayout.NORTH);
         add(inventoryPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
     }
@@ -129,9 +142,8 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     	        boolean merged = false;
     	        for (Item item : InventoryData.items) {
     	            if (item.getBarcode().equals(barcode.trim())) {
-    	                // ✅ Merge: update quantity and price
     	                item.setStock(item.getStock() + stock);
-    	                item.setPrice(price); // Optional: update to latest price
+    	                item.setPrice(price); 
     	                merged = true;
     	                break;
     	            }

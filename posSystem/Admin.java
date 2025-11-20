@@ -2,8 +2,10 @@
 package posSystem;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -13,43 +15,26 @@ public class Admin extends JFrame implements ActionListener {
     JButton btnEdit = new JButton("Edit");
     JButton btnDel = new JButton("Delete");
     JButton btnRefresh = new JButton("Refresh");
-    JButton btnLogout = new JButton("Back");
+    JButton btnBack = new JButton("Back");
     
-    private DefaultTableModel tableModel;
-    private JTable userTable;
+    JPanel historyPanel = new JPanel();
+    JPanel controlPanel = new JPanel();
+    
+    DefaultTableModel tableModel;
+    JTable userTable;
  
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
-    
     Color myColor = new Color(100, 150, 135); 
 
     public Admin() {
-        setSize(480, 510);
+        setSize(580, 610);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Admin");
         setLayout(null);
-        setResizable(false);
-        setIconImage(logo.getImage());
-        getContentPane().setBackground(myColor);
         setUndecorated(true);
-        
-        add(btnAdd);
-        add(btnEdit);
-        add(btnDel);
-        add(btnRefresh);
-        add(btnLogout);
-
-        btnAdd.setBounds(10, 10, 80, 30);
-        btnEdit.setBounds(100, 10, 80, 30);
-        btnDel.setBounds(190, 10, 80, 30);
-        btnRefresh.setBounds(280, 10, 80, 30);
-        btnLogout.setBounds(390, 10, 80, 30);
-
-        btnAdd.addActionListener(this);
-        btnEdit.addActionListener(this);
-        btnDel.addActionListener(this);
-        btnRefresh.addActionListener(this);
-        btnLogout.addActionListener(this);
+        setLayout(new BorderLayout());
+        setIconImage(logo.getImage());
         
         tableModel = new DefaultTableModel(new String[]{"Name", "Username", "Password"}, 0) {
             @Override
@@ -58,14 +43,56 @@ public class Admin extends JFrame implements ActionListener {
             }
         };
         userTable = new JTable(tableModel);
-        userTable.setRowHeight(50);
+        userTable.setRowHeight(20);
         userTable.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < userTable.getColumnCount(); i++) {
+        	userTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        JTableHeader header = userTable.getTableHeader();
+        header.setPreferredSize(new Dimension(header.getWidth(), 25));
+        header.setFont(new Font("Segoe UI", Font.BOLD, 15));
         JScrollPane scrollPane = new JScrollPane(userTable);
-        scrollPane.setBounds(10, 50, 460, 450);
-        add(scrollPane);
+        
+        Font titleFont = new Font("Segoe UI", Font.BOLD, 15); 
+        TitledBorder historyBorder = BorderFactory.createTitledBorder("ACCOUNTS");
+        historyBorder.setTitleFont(titleFont);
+        historyPanel.setLayout(new BorderLayout());
+        historyPanel.setBorder(historyBorder);
+        historyPanel.add(scrollPane, BorderLayout.CENTER);
+        historyPanel.setBackground(myColor);        
+        
+        Font titleFont1 = new Font("Segoe UI", Font.BOLD, 16); 
+        TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("CONTROLS");
+        inventoryBorder1.setTitleFont(titleFont1);
+        controlPanel.setLayout(null);
+        controlPanel.setPreferredSize(new Dimension(700, 80)); // Ensure space for buttons
+        controlPanel.setBorder(inventoryBorder1);
+  
+        controlPanel.setBackground(myColor);
+        controlPanel.add(btnAdd);
+        controlPanel.add(btnEdit);
+        controlPanel.add(btnDel);
+        controlPanel.add(btnRefresh);
+        controlPanel.add(btnBack);
 
+        btnAdd.setBounds(10, 25, 100, 40);
+        btnEdit.setBounds(120, 25, 100, 40);
+        btnDel.setBounds(230, 25, 100, 40);
+        btnRefresh.setBounds(340, 25, 100, 40);
+        btnBack.setBounds(470, 25, 100, 40);
+
+        btnAdd.addActionListener(this);
+        btnEdit.addActionListener(this);
+        btnDel.addActionListener(this);
+        btnRefresh.addActionListener(this);
+        btnBack.addActionListener(this);
+        
         userTable.getColumnModel().getColumn(2).setCellRenderer(new PasswordRenderer());
-
+        
+        add(historyPanel, BorderLayout.CENTER);
+        add(controlPanel, BorderLayout.SOUTH);
         loadUsers();
     }
 
@@ -154,7 +181,7 @@ public class Admin extends JFrame implements ActionListener {
         } else if (ev.getSource() == btnRefresh) {
             loadUsers();
             JOptionPane.showMessageDialog(this, "List refreshed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-        } else if (ev.getSource() == btnLogout) {
+        } else if (ev.getSource() == btnBack) {
             new SelectionAdmin().setVisible(true);
             setVisible(false);
         }

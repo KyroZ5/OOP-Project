@@ -12,16 +12,23 @@ public class TransactionHistory extends JFrame implements ActionListener {
 
     JButton btnRefresh = new JButton("Refresh");
     JButton btnBack = new JButton("Back");
+    JPanel logoPanel = new JPanel();
     JPanel historyPanel = new JPanel();
     JPanel controlPanel = new JPanel();
     DefaultTableModel tableModel;
     JTable transacTable;
 
+    ImageIcon BLogo = new ImageIcon("./img/logo-light-transparent.png");
+    Image img = BLogo.getImage();
+    Image newLogo = img.getScaledInstance(350, 80, Image.SCALE_SMOOTH);
+    ImageIcon Logo = new ImageIcon(newLogo);
+    JLabel bLogo = new JLabel();
+    
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     Color myColor = new Color(100, 150, 135); 
     
     public TransactionHistory() {
-    	setSize(500, 500);
+    	setSize(900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("History System");
@@ -29,7 +36,12 @@ public class TransactionHistory extends JFrame implements ActionListener {
         setLayout(new BorderLayout());
         setIconImage(logo.getImage());
         
-        tableModel = new DefaultTableModel(new String[]{"Transaction No.", "Date and Time", "Amount"}, 0) {
+        logoPanel.add(bLogo);
+        logoPanel.setBackground(myColor);
+        bLogo.setBounds(50, -5, 375, 105);
+        bLogo.setIcon(Logo);
+       
+        tableModel = new DefaultTableModel(new String[]{"Transaction No.", "Date and Time", "Amount", "Change", "Staff"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -49,7 +61,7 @@ public class TransactionHistory extends JFrame implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(transacTable);
         
         Font titleFont = new Font("Segoe UI", Font.BOLD, 15); 
-        TitledBorder historyBorder = BorderFactory.createTitledBorder("History List");
+        TitledBorder historyBorder = BorderFactory.createTitledBorder("TRANSACTION HISTORY");
         historyBorder.setTitleFont(titleFont);
         historyPanel.setLayout(new BorderLayout());
         historyPanel.setBorder(historyBorder);
@@ -57,7 +69,7 @@ public class TransactionHistory extends JFrame implements ActionListener {
         historyPanel.setBackground(myColor);        
         
         Font titleFont1 = new Font("Segoe UI", Font.BOLD, 16); 
-        TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("Controls");
+        TitledBorder inventoryBorder1 = BorderFactory.createTitledBorder("CONTROLS");
         inventoryBorder1.setTitleFont(titleFont1);
         controlPanel.setLayout(null);
         controlPanel.setPreferredSize(new Dimension(700, 80)); // Ensure space for buttons
@@ -67,30 +79,30 @@ public class TransactionHistory extends JFrame implements ActionListener {
         controlPanel.add(btnRefresh);
         controlPanel.add(btnBack);
 
-        btnRefresh.setBounds(80, 25, 150, 40);
-        btnBack.setBounds(270, 25, 150, 40);
+        btnRefresh.setBounds(20, 25, 150, 40);
+        btnBack.setBounds(740, 25, 150, 40);
 
 
         btnRefresh.addActionListener(this);
         btnBack.addActionListener(this);
 
-
+        add(logoPanel, BorderLayout.NORTH);
         add(historyPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
         loadTransactions();
     }
-
     private void loadTransactions() {
         tableModel.setRowCount(0);
         for (TransacData t : TransacData.transData) {
             tableModel.addRow(new Object[]{
                 t.getTransactionNo(),
                 t.getDateAndTime(),
-                "₱" + String.format("%.2f", t.getAmount())
+                "₱" + String.format("%.2f", t.getAmount()),
+                "₱" + String.format("%.2f", t.getBalance()),
+                t.getEmployeeName()
             });
         }
     }
-    	
     @Override
     public void actionPerformed(ActionEvent ev) {
        if (ev.getSource() == btnRefresh) {
@@ -100,5 +112,8 @@ public class TransactionHistory extends JFrame implements ActionListener {
             new SelectionCashier().setVisible(true);
             setVisible(false);
         }
-    }
+    } public static void main(String[] args) {
+     TransactionHistory pos = new TransactionHistory();
+     pos.setVisible(true);
+ 	}
 }
