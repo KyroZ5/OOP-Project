@@ -139,47 +139,54 @@ public class InventoryAdmin extends JFrame implements ActionListener {
     	        int stock = Integer.parseInt(stockStr.trim());
     	        double price = Double.parseDouble(priceStr.trim());
 
+    	        if (stock <= 0 || price <= 0) {
+    	            JOptionPane.showMessageDialog(this, "Stock and price must be greater than 0.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+    	            return;
+    	        }
     	        boolean merged = false;
     	        for (Item item : InventoryData.items) {
     	            if (item.getBarcode().equals(barcode.trim())) {
     	                item.setStock(item.getStock() + stock);
-    	                item.setPrice(price); 
+    	                item.setPrice(price);
     	                merged = true;
     	                break;
     	            }
     	        }
-
     	        if (!merged) {
     	            InventoryData.items.add(new Item(barcode.trim(), name.trim(), stock, price));
     	        }
-
     	        refreshTable();
     	        JOptionPane.showMessageDialog(this, merged ? "Item merged successfully!" : "Item added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
     	    } catch (Exception ex) {
     	        JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
     	    }
     	} else if (e.getSource() == btnEdit) {
-            int selectedRow = inventoryTable.getSelectedRow();
-            if (selectedRow != -1) {
-                Item item = items.get(selectedRow);
-                String newName = JOptionPane.showInputDialog("Edit item name:", item.getName());
-                String newStockStr = JOptionPane.showInputDialog("Edit stock quantity:", item.getStock());
-                String newPriceStr = JOptionPane.showInputDialog("Edit price:", item.getPrice());
-
-                try {
-                    item.setName(newName.trim());
-                    item.setStock(Integer.parseInt(newStockStr.trim()));
-                    item.setPrice(Double.parseDouble(newPriceStr.trim()));
-                    refreshTable();
-                    JOptionPane.showMessageDialog(this, "Item updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Select an item to edit.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
+    	    int selectedRow = inventoryTable.getSelectedRow();
+    	    if (selectedRow != -1) {
+    	        Item item = items.get(selectedRow);
+    	        String newName = JOptionPane.showInputDialog("Edit item name:", item.getName());
+    	        String newStockStr = JOptionPane.showInputDialog("Edit stock quantity:", item.getStock());
+    	        String newPriceStr = JOptionPane.showInputDialog("Edit price:", item.getPrice());
+    	        try {
+    	            int newStock = Integer.parseInt(newStockStr.trim());
+    	            double newPrice = Double.parseDouble(newPriceStr.trim());
+    	            if (newStock < 0 || newPrice < 0) {
+    	                JOptionPane.showMessageDialog(this, "Stock and price must be 0 or higher.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+    	                return;
+    	            }
+    	            item.setName(newName.trim());
+    	            item.setStock(newStock);
+    	            item.setPrice(newPrice);
+    	            refreshTable();
+    	            JOptionPane.showMessageDialog(this, "Item updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    	        } catch (Exception ex) {
+    	            JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+    	        }
+    	    } else {
+    	        JOptionPane.showMessageDialog(this, "Select an item to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+    	    }
+    	
+            
         } else if (e.getSource() == btnDelete) {
             int selectedRow = inventoryTable.getSelectedRow();
             if (selectedRow != -1) {

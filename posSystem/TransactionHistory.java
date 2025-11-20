@@ -112,8 +112,5 @@ public class TransactionHistory extends JFrame implements ActionListener {
             new SelectionCashier().setVisible(true);
             setVisible(false);
         }
-    } public static void main(String[] args) {
-     TransactionHistory pos = new TransactionHistory();
-     pos.setVisible(true);
- 	}
+    }
 }

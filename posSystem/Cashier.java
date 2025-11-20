@@ -28,8 +28,7 @@ public class Cashier extends JFrame implements ActionListener{
      JPanel headerPanel;
      JLabel lblDateTime;
      JLabel bLogo; 
-
-  
+     JLabel lblUser = new JLabel("Logged in as: " + Users.getStaff());
      JPanel transactionPanel;
      DefaultTableModel transactionModel;
      JTable transactionTable;
@@ -42,22 +41,22 @@ public class Cashier extends JFrame implements ActionListener{
      JButton btnDeleteItem = new JButton("Delete Item");
 
      JPanel qtyPanel;
-     JLabel lblQty = new JLabel("Adjust Qty:");
+     JLabel lblQty = new JLabel("Adjust Quantity:");
      JTextField txtQty = new JTextField(5);
-     JButton btnApplyQty = new JButton("Apply Qty");
+     JButton btnApplyQty = new JButton("Apply Quantity");
 
      JPanel cashInputPanel;
      JLabel lblTotal = new JLabel("Total: ₱0.00");
      JLabel lblCashReceived = new JLabel("Cash Received:");
-     JTextField txtCashReceived = new JTextField(10);
+     JTextField txtCashReceived = new JTextField(50);
      JButton btnProcessPayment = new JButton("Process Payment");
-     JButton btnReset = new JButton("Reset");
-     JLabel lblBalance = new JLabel("Balance: ₱0.00");
+     JButton btnReset = new JButton("Clear All");
+     JLabel lblChange = new JLabel("Change: ₱0.00");
 
      JPanel numPadPanel;
      
      JPanel logoutPanel;
-     JButton btnLogout = new JButton("Menu");
+     JButton btnBack = new JButton("Menu");
 
      JPanel receiptPanel;
      JTextArea receiptArea = new JTextArea();
@@ -82,7 +81,7 @@ public class Cashier extends JFrame implements ActionListener{
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     ImageIcon BLogo = new ImageIcon("./img/logo-light-transparent.png");
     Image img = BLogo.getImage();
-    Image newLogo = img.getScaledInstance(350, 80, Image.SCALE_SMOOTH);
+    Image newLogo = img.getScaledInstance(780, 120, Image.SCALE_SMOOTH);
     ImageIcon Logo = new ImageIcon(newLogo);
 
     private String centerText(String text, int width) {
@@ -95,7 +94,7 @@ public class Cashier extends JFrame implements ActionListener{
     }
 
     public Cashier() {
-    	setSize(1450,800);
+    	setSize(1460,900);
     	setLocationRelativeTo(null);
         setUndecorated(true);
         setTitle("Pentagram POS (Point-of-Sale) System");
@@ -104,29 +103,16 @@ public class Cashier extends JFrame implements ActionListener{
         setIconImage(logo.getImage());
         getContentPane().setBackground(myColor);
     
-
         // Header Panel
         headerPanel = new JPanel(null);
         headerPanel.setBackground(myColor);
-        headerPanel.setBounds(20, 10, 1350, 100);
+        headerPanel.setBounds(20, 5, 1350, 115);
         bLogo = new JLabel(Logo);
-        bLogo.setBounds(20, 10, 350, 80);
-        lblDateTime = new JLabel();
-        lblDateTime.setFont(new Font("Arial", Font.BOLD, 16));
-        lblDateTime.setForeground(Color.BLACK);
-        lblDateTime.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblDateTime.setBounds(1150, 10, 180, 80);
+        bLogo.setBounds(20, 5, 1350, 115);
         headerPanel.add(bLogo);
-        headerPanel.add(lblDateTime);
         add(headerPanel);
 
-        Timer timer = new Timer(1000, e -> {
-            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            String time = new SimpleDateFormat("hh:mm a").format(new Date());
-            lblDateTime.setText("<html><div style='text-align: right;'>" + date + "<br>" + time + "</div></html>");
-        });
-        timer.start();
-
+        
         // Transaction Panel
         transactionPanel = new JPanel(null);
         transactionPanel.setBackground(myColor);
@@ -149,15 +135,15 @@ public class Cashier extends JFrame implements ActionListener{
         header.setPreferredSize(new Dimension(header.getWidth(), 50));
         header.setFont(new Font("Segoe UI", Font.PLAIN, 30));
         
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+        render.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < transactionTable.getColumnCount(); i++) {
-            transactionTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-            transactionTable.getColumnModel().getColumn(i).setPreferredWidth(180);
+            transactionTable.getColumnModel().getColumn(i).setCellRenderer(render);
+            transactionTable.getColumnModel().getColumn(i).setPreferredWidth(176);
         }
 
         JScrollPane transScroll = new JScrollPane(transactionTable);
-        transScroll.setBounds(10, 20, 880, 470);
+        transScroll.setBounds(10, 20, 883, 470);
         transactionPanel.add(transScroll);
         add(transactionPanel);
 
@@ -165,41 +151,55 @@ public class Cashier extends JFrame implements ActionListener{
         paymentPanel = new JPanel(null);
         paymentPanel.setBackground(myColor);
         paymentPanel.setBorder(BorderFactory.createTitledBorder("Payment"));
-        paymentPanel.setBounds(940, 120, 500, 350);
-
-        lblBarcode.setBounds(20, 30, 80, 25);
-        txtBarcode.setBounds(100, 30, 150, 25);
-        btnAddItem.setBounds(260, 30, 100, 25);
-        btnDeleteItem.setBounds(370, 30, 100, 25);
+        paymentPanel.setBounds(940, 120, 500, 760);
+        lblUser.setBounds(-10, 690, 500, 80);
+        lblUser.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblUser.setForeground(Color.WHITE);
+        lblUser.setHorizontalAlignment(SwingConstants.RIGHT);
+        paymentPanel.add(lblUser);
+        lblBarcode.setBounds(20, 30, 150, 40);
+        lblBarcode.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        txtBarcode.setBounds(20, 80, 200, 40);
+        txtBarcode.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        btnAddItem.setBounds(230, 30, 250, 40);
+        btnAddItem.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        btnDeleteItem.setBounds(230, 80, 250, 40);
+        btnDeleteItem.setFont(new Font("Segoe UI", Font.BOLD, 25));
         paymentPanel.add(lblBarcode);
         paymentPanel.add(txtBarcode);
         paymentPanel.add(btnAddItem);
         paymentPanel.add(btnDeleteItem);
 
-        lblQty.setBounds(20, 70, 80, 25);
-        txtQty.setBounds(100, 70, 50, 25);
-        btnApplyQty.setBounds(160, 70, 120, 25);
+        lblQty.setBounds(20, 140, 250, 40);
+        lblQty.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        txtQty.setBounds(20, 180, 200, 40);
+        txtQty.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        btnApplyQty.setBounds(230, 180, 250, 40);
+        btnApplyQty.setFont(new Font("Segoe UI", Font.BOLD, 25));
         paymentPanel.add(lblQty);
         paymentPanel.add(txtQty);
         paymentPanel.add(btnApplyQty);
 
-        lblTotal.setBounds(20, 110, 200, 25);
+        lblTotal.setBounds(20, 310, 500, 30);
+        lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 25));
         paymentPanel.add(lblTotal);
 
-        lblCashReceived.setBounds(20, 150, 100, 25);
-        txtCashReceived.setBounds(130, 150, 100, 25);
-        btnProcessPayment.setBounds(240, 150, 120, 25);
-        btnReset.setBounds(370, 150, 100, 25);
+        lblCashReceived.setBounds(20, 220, 250, 40);
+        lblCashReceived.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        txtCashReceived.setBounds(20, 260, 200, 40);
+        txtCashReceived.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        btnProcessPayment.setBounds(230, 260, 250, 40);
+        btnProcessPayment.setFont(new Font("Segoe UI", Font.BOLD, 25));
         paymentPanel.add(lblCashReceived);
         paymentPanel.add(txtCashReceived);
         paymentPanel.add(btnProcessPayment);
-        paymentPanel.add(btnReset);
 
-        lblBalance.setBounds(20, 190, 200, 25);
-        paymentPanel.add(lblBalance);
+        lblChange.setBounds(250, 310, 500, 30);
+        lblChange.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        paymentPanel.add(lblChange);
 
         numPadPanel = new JPanel(new GridLayout(4, 3, 5, 5));
-        numPadPanel.setBounds(20, 230, 460, 100);
+        numPadPanel.setBounds(20, 360, 460, 350);
         numPadPanel.setBackground(myColor);
         String[] keys = {"7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "Clear"};
         for (String key : keys) {
@@ -216,15 +216,37 @@ public class Cashier extends JFrame implements ActionListener{
         receiptPanel = new JPanel(null);
         receiptPanel.setBackground(myColor);
         receiptPanel.setBorder(BorderFactory.createTitledBorder("Receipt"));
-        receiptPanel.setBounds(940, 480, 500, 250);
-
+        receiptPanel.setBounds(20, 630, 900, 250);
+        
+        lblDateTime = new JLabel();
+        lblDateTime.setFont(new Font("Arial", Font.BOLD, 38));
+        lblDateTime.setForeground(Color.BLACK);
+        lblDateTime.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblDateTime.setBounds(640, 150, 250, 105);
+        receiptPanel.add(lblDateTime);
+        
+        Timer timer = new Timer(1000, e -> {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String time = new SimpleDateFormat("hh:mm a").format(new Date());
+            lblDateTime.setForeground(Color.WHITE);
+            lblDateTime.setText("<html><div style='text-align: right;'>" + date + "<br>" + time + "</div></html>");
+        });
+        timer.start();
+       
+        // Logged in User
         receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         receiptArea.setEditable(false);
         receiptScroll = new JScrollPane(receiptArea);
-        receiptScroll.setBounds(10, 20, 480, 180);
+        receiptScroll.setBounds(10, 20, 640, 220);
         receiptPanel.add(receiptScroll);
-
-        btnPrintReceipt.setBounds(370, 210, 120, 30);
+        btnReset.setBounds(660, 70, 230, 40);
+        btnReset.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        receiptPanel.add(btnReset);
+        btnPrintReceipt.setBounds(660, 20, 230, 40);
+        btnPrintReceipt.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        btnBack.setBounds(660, 120, 230, 40);
+        btnBack.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        receiptPanel.add(btnBack);
         receiptPanel.add(btnPrintReceipt);
         add(receiptPanel);
 
@@ -232,8 +254,8 @@ public class Cashier extends JFrame implements ActionListener{
         logoutPanel = new JPanel(null);
         logoutPanel.setBackground(myColor);
         logoutPanel.setBounds(1320, 500, 120, 50);
-        btnLogout.setBounds(1300, 750, 120, 40);
-        logoutPanel.add(btnLogout);
+        
+        //logoutPanel.add(btnBack);
         add(logoutPanel);
 
         // Listeners
@@ -243,7 +265,7 @@ public class Cashier extends JFrame implements ActionListener{
         btnApplyQty.addActionListener(this);
         btnProcessPayment.addActionListener(this);
         btnReset.addActionListener(this);
-        btnLogout.addActionListener(this);
+        btnBack.addActionListener(this);
         btnPrintReceipt.addActionListener(this);
 
         loadInventoryData();
@@ -348,7 +370,7 @@ public class Cashier extends JFrame implements ActionListener{
         }
 
         double balance = cash - total;
-        lblBalance.setText("Balance: ₱" + String.format("%.2f", balance));
+        lblChange.setText("Balance: ₱" + String.format("%.2f", balance));
         int transactionNo = TransacData.transData.size() + 1;
         TransacData.transData.add(new TransacData(transactionNo, total, balance));
         JOptionPane.showMessageDialog(this, "Transaction recorded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -383,7 +405,7 @@ public class Cashier extends JFrame implements ActionListener{
         receiptArea.append("---------------------------------------------------------------\n");
         receiptArea.append("Total:   P" + String.format("%.2f", total) + "\n");
         receiptArea.append("Cash:    P" + String.format("%.2f", cash) + "\n");
-        receiptArea.append("Balance: P" + String.format("%.2f", balance) + "\n\n\n\n");
+        receiptArea.append("Change: P" + String.format("%.2f", balance) + "\n\n\n\n");
         receiptArea.append("      THANK YOU FOR SHOPPING!\n");
         receiptArea.append("         \n\n\n\n");
     }
@@ -439,7 +461,7 @@ public class Cashier extends JFrame implements ActionListener{
         txtBarcode.setText("");
         txtQty.setText("");
         lblTotal.setText("Total: ₱0.00");
-        lblBalance.setText("Balance: ₱0.00");
+        lblChange.setText("Change: ₱0.00");
         receiptArea.setText("");
     }
    
@@ -491,7 +513,7 @@ public class Cashier extends JFrame implements ActionListener{
         else if(src == btnPrintReceipt) {
             printReceiptDirect();
         }
-        else if(src == btnLogout) {
+        else if(src == btnBack) {
             if (Users.isAdmin()){
             new SelectionAdmin().setVisible(true);
             this.dispose();
@@ -531,8 +553,4 @@ public class Cashier extends JFrame implements ActionListener{
             }
         }
     }
-    public static void main(String[] args) {
-   	 Cashier pos = new Cashier();
-        pos.setVisible(true);
-    	}
 }

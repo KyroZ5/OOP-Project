@@ -128,8 +128,5 @@
 	            new SelectionAdmin().setVisible(true);
 	            setVisible(false);
 	        }
-	    }public static void main(String[] args) {
-	    	TransactionHistoryAdmin pos = new TransactionHistoryAdmin();
-	        pos.setVisible(true);
-	    	}
+	    }
 	}

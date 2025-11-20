@@ -87,7 +87,7 @@ public class Inventory extends JFrame implements ActionListener {
         controlPanel.add(btnRefresh);
         controlPanel.add(btnBack);
 
-        btnRefresh.setBounds(20, 25, 150, 40);x
+        btnRefresh.setBounds(20, 25, 150, 40);
         btnBack.setBounds(740, 25, 150, 40);
 
         btnRefresh.setEnabled(true);

@@ -95,10 +95,7 @@ public class Add extends JFrame implements ActionListener {
         btnregLogin.setBounds(240, 170, 100, 30);
         btnregLogin.setFont(font);
         btnregLogin.addActionListener(this);
-
-
     }
-
     @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == btnregLogin) {
@@ -128,7 +125,6 @@ public class Add extends JFrame implements ActionListener {
         } else if (ev.getSource() == btnregCancel) {
         	new Admin().setVisible(true);
         	this.dispose();
-            
         }
     }
 }

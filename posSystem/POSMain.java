@@ -30,7 +30,7 @@ public class POSMain extends JFrame implements ActionListener {
     ImageIcon Logo = new ImageIcon(newLogo);
     JLabel bLogo = new JLabel();
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
-    Font font = new Font("Montserrat", Font.BOLD, 15);
+    Font font = new Font("Segoe UI", Font.BOLD, 20);
     
     ImageIcon ULogo = new ImageIcon("./img/user.png");
 	Image imgU = ULogo.getImage();
@@ -100,9 +100,9 @@ public class POSMain extends JFrame implements ActionListener {
          lblPassword.setFont(font);
          txtPassword.setBounds(150, 85, 200, 30);
 
-         btnLogin.setBounds(80, 170, 100, 30);
+         btnLogin.setBounds(60, 170, 150, 40);
          btnLogin.setFont(font);
-         btnCancel.setBounds(280, 170, 100, 30);
+         btnCancel.setBounds(260, 170, 150, 40);
          btnCancel.setFont(font);
 
          btnLogin.addActionListener(this);
