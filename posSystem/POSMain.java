@@ -170,6 +170,7 @@ public class POSMain extends JFrame implements ActionListener {
    
     @Override
     public void actionPerformed(ActionEvent ev) {
+        int index = 0;
         if (ev.getSource() == btnCancel) {
             int x = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Form", JOptionPane.YES_NO_OPTION);
             if (x == JOptionPane.YES_OPTION) {
@@ -202,6 +203,7 @@ public class POSMain extends JFrame implements ActionListener {
                     Users.setAdmin(false);
                     new SelectionCashier().setVisible(true);
                 }
+                Users.setStaff(matchedUser.getEmployeeName());
                 setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid username or password!", "Invalid Login", JOptionPane.ERROR_MESSAGE);

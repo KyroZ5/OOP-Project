@@ -369,7 +369,7 @@ public class Cashier extends JFrame implements ActionListener{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm a");
         receiptArea.append("Date: " + dateFormat.format(new Date()) + "\n");
         receiptArea.append("Transaction # " + TransacData.transData.size() + "\n");
-        receiptArea.append("Staff: " + Users.getEmployeeName() + "\n\n");
+        receiptArea.append("Staff: " + Users.getStaff()+"\n\n");
        
         receiptArea.append(String.format("%-3s %-5s %-5s %-5s\n", "Qty ->", "Item ->", "Price ->", "Subtotal"));
         receiptArea.append("---------------------------------------------------------------\n");

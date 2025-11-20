@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Users {
     public static ArrayList<Users> accts = new ArrayList<>();
     private static boolean Admin;
+    private static String staff;
     private String username;
     private String pass;
     private String empName;
@@ -14,7 +15,7 @@ public class Users {
         this.pass = pass;
         this.empName = empName;
     }
-    
+    public static String getStaff(){ return staff; }
     public static boolean isAdmin(){return Admin;}
     public String getUsername() { return username; }
     public String getPassword() { return pass; }
@@ -27,6 +28,9 @@ public class Users {
                 accts.add(new Users(parts[0], parts[1], parts[2]));
             }
         }
+    }
+    public static void setStaff(String staff){
+       Users.staff = staff;
     }
     public static void setAdmin(boolean isAdmin){
         Users.Admin = isAdmin;
