@@ -1,6 +1,7 @@
 package posSystem;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -81,7 +82,7 @@ public class Cashier extends JFrame implements ActionListener{
     ImageIcon logo = new ImageIcon("./img/logo-icon-dark-transparent.png");
     ImageIcon BLogo = new ImageIcon("./img/logo-light-transparent.png");
     Image img = BLogo.getImage();
-    Image newLogo = img.getScaledInstance(780, 120, Image.SCALE_SMOOTH);
+    Image newLogo = img.getScaledInstance(630, 90, Image.SCALE_SMOOTH);
     ImageIcon Logo = new ImageIcon(newLogo);
 
     private String centerText(String text, int width) {
@@ -106,9 +107,9 @@ public class Cashier extends JFrame implements ActionListener{
         // Header Panel
         headerPanel = new JPanel(null);
         headerPanel.setBackground(myColor);
-        headerPanel.setBounds(20, 5, 1350, 115);
+        headerPanel.setBounds(20, 5, 1350, 95);
         bLogo = new JLabel(Logo);
-        bLogo.setBounds(20, 5, 1350, 115);
+        bLogo.setBounds(20, 5, 1350, 95);
         headerPanel.add(bLogo);
         add(headerPanel);
 
@@ -116,9 +117,12 @@ public class Cashier extends JFrame implements ActionListener{
         // Transaction Panel
         transactionPanel = new JPanel(null);
         transactionPanel.setBackground(myColor);
-        transactionPanel.setBorder(BorderFactory.createTitledBorder("Transaction"));
-        transactionPanel.setBounds(20, 120, 900, 500);	
-
+        transactionPanel.setBounds(20, 100, 900, 420);	
+        Font titleFont = new Font("Segoe UI", Font.BOLD, 15); 
+        TitledBorder transactionPaneBorder = BorderFactory.createTitledBorder("TRANSACTION");
+        transactionPaneBorder.setTitleFont(titleFont);
+        transactionPanel.setBorder(transactionPaneBorder);
+        
         transactionModel = new DefaultTableModel(
             new String[]{"Barcode", "Item Name", "Qty", "Price (₱)", "Subtotal (₱)"}, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -143,63 +147,66 @@ public class Cashier extends JFrame implements ActionListener{
         }
 
         JScrollPane transScroll = new JScrollPane(transactionTable);
-        transScroll.setBounds(10, 20, 883, 470);
+        transScroll.setBounds(10, 20, 883, 395);
         transactionPanel.add(transScroll);
         add(transactionPanel);
 
         // Payment Panel
         paymentPanel = new JPanel(null);
         paymentPanel.setBackground(myColor);
-        paymentPanel.setBorder(BorderFactory.createTitledBorder("Payment"));
-        paymentPanel.setBounds(940, 120, 500, 760);
-        lblUser.setBounds(-10, 690, 500, 80);
-        lblUser.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        paymentPanel.setBounds(920, 100, 440, 665);
+        TitledBorder paymentPanelBorder = BorderFactory.createTitledBorder("PAYMENT");
+        paymentPanelBorder.setTitleFont(titleFont);
+        paymentPanel.setBorder(paymentPanelBorder);
+        
+        lblUser.setBounds(0, 600, 400, 80);
+        lblUser.setFont(new Font("Segoe UI", Font.BOLD, 15));
         lblUser.setForeground(Color.WHITE);
         lblUser.setHorizontalAlignment(SwingConstants.RIGHT);
         paymentPanel.add(lblUser);
         lblBarcode.setBounds(20, 30, 150, 40);
-        lblBarcode.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        lblBarcode.setFont(new Font("Segoe UI", Font.BOLD, 20));
         txtBarcode.setBounds(20, 80, 200, 40);
-        txtBarcode.setFont(new Font("Segoe UI", Font.BOLD, 25));
-        btnAddItem.setBounds(230, 30, 250, 40);
-        btnAddItem.setFont(new Font("Segoe UI", Font.BOLD, 25));
-        btnDeleteItem.setBounds(230, 80, 250, 40);
-        btnDeleteItem.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        txtBarcode.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        btnAddItem.setBounds(230, 30, 200, 40);
+        btnAddItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        btnDeleteItem.setBounds(230, 80, 200, 40);
+        btnDeleteItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
         paymentPanel.add(lblBarcode);
         paymentPanel.add(txtBarcode);
         paymentPanel.add(btnAddItem);
         paymentPanel.add(btnDeleteItem);
 
-        lblQty.setBounds(20, 140, 250, 40);
-        lblQty.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        lblQty.setBounds(20, 140, 200, 40);
+        lblQty.setFont(new Font("Segoe UI", Font.BOLD, 20));
         txtQty.setBounds(20, 180, 200, 40);
-        txtQty.setFont(new Font("Segoe UI", Font.BOLD, 25));
-        btnApplyQty.setBounds(230, 180, 250, 40);
-        btnApplyQty.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        txtQty.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        btnApplyQty.setBounds(230, 180, 200, 40);
+        btnApplyQty.setFont(new Font("Segoe UI", Font.BOLD, 20));
         paymentPanel.add(lblQty);
         paymentPanel.add(txtQty);
         paymentPanel.add(btnApplyQty);
 
         lblTotal.setBounds(20, 310, 500, 30);
-        lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 20));
         paymentPanel.add(lblTotal);
 
-        lblCashReceived.setBounds(20, 220, 250, 40);
-        lblCashReceived.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        lblCashReceived.setBounds(20, 220, 200, 40);
+        lblCashReceived.setFont(new Font("Segoe UI", Font.BOLD, 20));
         txtCashReceived.setBounds(20, 260, 200, 40);
-        txtCashReceived.setFont(new Font("Segoe UI", Font.BOLD, 25));
-        btnProcessPayment.setBounds(230, 260, 250, 40);
-        btnProcessPayment.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        txtCashReceived.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        btnProcessPayment.setBounds(230, 260, 200, 40);
+        btnProcessPayment.setFont(new Font("Segoe UI", Font.BOLD, 20));
         paymentPanel.add(lblCashReceived);
         paymentPanel.add(txtCashReceived);
         paymentPanel.add(btnProcessPayment);
 
         lblChange.setBounds(250, 310, 500, 30);
-        lblChange.setFont(new Font("Segoe UI", Font.BOLD, 25));
+        lblChange.setFont(new Font("Segoe UI", Font.BOLD, 20));
         paymentPanel.add(lblChange);
 
         numPadPanel = new JPanel(new GridLayout(4, 3, 5, 5));
-        numPadPanel.setBounds(20, 360, 460, 350);
+        numPadPanel.setBounds(20, 360, 400, 250);
         numPadPanel.setBackground(myColor);
         String[] keys = {"7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "Clear"};
         for (String key : keys) {
@@ -215,8 +222,10 @@ public class Cashier extends JFrame implements ActionListener{
         // Receipt Panel
         receiptPanel = new JPanel(null);
         receiptPanel.setBackground(myColor);
-        receiptPanel.setBorder(BorderFactory.createTitledBorder("Receipt"));
-        receiptPanel.setBounds(20, 630, 900, 250);
+        receiptPanel.setBounds(20, 515, 900, 250);
+        TitledBorder receiptPanelBorder = BorderFactory.createTitledBorder("RECEIPT");
+        receiptPanelBorder.setTitleFont(titleFont);
+        receiptPanel.setBorder(receiptPanelBorder);
         
         lblDateTime = new JLabel();
         lblDateTime.setFont(new Font("Arial", Font.BOLD, 38));
@@ -384,8 +393,8 @@ public class Cashier extends JFrame implements ActionListener{
         receiptArea.setText("");
         
         receiptArea.append("         \n\n");
-        receiptArea.append("         PENTAGRAM RECEIPT\n");
-        receiptArea.append("---------------------------------------------------------------\n");
+        receiptArea.append("       PENTAGRAM RECEIPT\n");
+        receiptArea.append("********************************\n");
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm a");
         receiptArea.append("Date: " + dateFormat.format(new Date()) + "\n");
@@ -393,7 +402,7 @@ public class Cashier extends JFrame implements ActionListener{
         receiptArea.append("Staff: " + Users.getStaff()+"\n\n");
        
         receiptArea.append(String.format("%-3s %-5s %-5s %-5s\n", "Qty ->", "Item ->", "Price ->", "Subtotal"));
-        receiptArea.append("---------------------------------------------------------------\n");
+        receiptArea.append("********************************\n");
         
         for (int i = 0; i < transactionModel.getRowCount(); i++) {
             String itemName = transactionModel.getValueAt(i, 1).toString();
@@ -402,14 +411,13 @@ public class Cashier extends JFrame implements ActionListener{
             String subtotal = transactionModel.getValueAt(i, 4).toString();
             receiptArea.append(String.format("%-3s %-31s %-10s %-5s\n", qty, itemName,  price, subtotal));
         }
-        receiptArea.append("---------------------------------------------------------------\n");
+        receiptArea.append("********************************\n");
         receiptArea.append("Total:   P" + String.format("%.2f", total) + "\n");
         receiptArea.append("Cash:    P" + String.format("%.2f", cash) + "\n");
-        receiptArea.append("Change: P" + String.format("%.2f", balance) + "\n\n\n\n");
+        receiptArea.append("Change:  P" + String.format("%.2f", balance) + "\n\n\n\n");
         receiptArea.append("      THANK YOU FOR SHOPPING!\n");
         receiptArea.append("         \n\n\n\n");
     }
-    
     private void printReceiptDirect() {
         try {
             String receiptText = receiptArea.getText();
@@ -552,5 +560,8 @@ public class Cashier extends JFrame implements ActionListener{
                 }
             }
         }
-    }
+    }public static void main(String[] args) {
+	 Cashier pos = new Cashier();
+     pos.setVisible(true);
+ 	}
 }

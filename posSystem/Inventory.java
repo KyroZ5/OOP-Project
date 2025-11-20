@@ -82,8 +82,8 @@ public class Inventory extends JFrame implements ActionListener {
         controlPanel.setLayout(null);
         controlPanel.setPreferredSize(new Dimension(700, 80)); // Ensure space for buttons
         controlPanel.setBorder(inventoryBorder1);
-  
         controlPanel.setBackground(myColor);
+        
         controlPanel.add(btnRefresh);
         controlPanel.add(btnBack);
 
